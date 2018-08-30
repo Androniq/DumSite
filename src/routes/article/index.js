@@ -14,8 +14,10 @@ import Article from './Article';
 const title = 'Article Page';
 
 async function action({ fetch }, params) {
-  const articlesResp = await fetch('/api/article/' + params[0], { method: 'GET' });
-  var json = await articlesResp.json();
+  const articlesResp = await fetch(`/api/article/${params[0]}`, {
+    method: 'GET',
+  });
+  const json = await articlesResp.json();
   console.info(json);
   console.info(articlesResp);
   return {

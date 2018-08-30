@@ -18,7 +18,7 @@ class Home extends React.Component {
       PropTypes.shape({
         _id: PropTypes.string.isRequired,
         PageTitle: PropTypes.string.isRequired,
-        Url: PropTypes.string.isRequired
+        Url: PropTypes.string.isRequired,
       }),
     ).isRequired,
   };
@@ -30,9 +30,9 @@ class Home extends React.Component {
           {this.props.articles.map(item => (
             <article key={item._id} className={s.newsItem}>
               <h3 className={s.newsTitle}>
-                <a href={'/article/'+item.Url}>{item.PageTitle}</a>
+                <a href={`/article/${item.Url}`}>{item.PageTitle}</a>
               </h3>
-              <div></div>
+              <div />
             </article>
           ))}
         </div>

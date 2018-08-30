@@ -89,23 +89,26 @@ app.use((err, req, res, next) => {
 
 app.use(passport.initialize());
 
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Use the GoogleStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and Google
 //   profile), and invoke a callback with a user object.
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000"
-  },  
-  function(accessToken, refreshToken, profile, done) {
-       User.findOrCreate({ googleId: profile.id }, function (err, user) {
-         return done(err, user);
-       });
-  }
-));
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: 'http://localhost:3000',
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOrCreate({ googleId: profile.id }, (err, user) =>
+        done(err, user),
+      );
+    },
+  ),
+);
 
 app.get(
   '/login/facebook',
@@ -150,19 +153,21 @@ app.get(
   },
 );
 
-app.get('/login/google/callback', 
+app.get(
+  '/login/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+  (req, res) => {
     res.redirect('/');
-  });
+  },
+);
 
 // API
 
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
-  var code = req.params.code;
-  var articleData = await getArticleInfo(code);
-  res.send({ articleData: articleData });
+  const code = req.params.code;
+  const articleData = await getArticleInfo(code);
+  res.send({ articleData });
 });
 
 app.get('/api/getArticles', async (req, res) => {
