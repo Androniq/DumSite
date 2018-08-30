@@ -23,21 +23,34 @@ class Home extends React.Component {
     ).isRequired,
   };
 
+  state = {
+    articles: [],
+  };
+
+  componentWillMount() {
+    this.callApi()
+      .then(res => this.setState({ articles: res.data }))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('/api/getArticles');
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  };
+
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <h1>React.js News</h1>
-          {this.props.news.map(item => (
-            <article key={item.link} className={s.newsItem}>
+          {this.state.articles.map(item => (
+            <article key={item._id} className={s.newsItem}>
               <h1 className={s.newsTitle}>
-                <a href={item.link}>{item.title}</a>
+                <a href={`/article/${item.Url}`}>{item.PageTitle}</a>
               </h1>
-              <div
-                className={s.newsDesc}
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: item.content }}
-              />
             </article>
           ))}
         </div>

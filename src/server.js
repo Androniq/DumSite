@@ -31,7 +31,7 @@ import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import {MyFunc} from './serverLogic.js'
+import { MyFunc, getArticles } from './serverLogic.js';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -48,7 +48,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 const app = express();
 
-var staticExport = require('./serverStartup.js');
+const staticExport = require('./serverStartup.js');
 
 //
 // If you are using proxy from external machine, you can set TRUST_PROXY env
@@ -110,30 +110,34 @@ app.get(
 
 // User requests
 
-app.get('/myrequest', async (req, res) =>
-  {
-    var mongoAsync = staticExport.mongoAsync;
-    if (!mongoAsync.ready)
-    {
-      res.send({message:"not ready"});
-      return;
-    }
-    MyFunc();
-    res.send({message:"111"});
+app.get('/myrequest', async (req, res) => {
+  const mongoAsync = staticExport.mongoAsync;
+  if (!mongoAsync.ready) {
+    res.send({ message: 'not ready' });
+    return;
   }
-);
+  MyFunc();
+  res.send({ message: '111' });
+});
 
-app.get('/article/:code', async (req, res) =>
-  {
-    var mongoAsync = staticExport.mongoAsync;
-    if (!mongoAsync.ready)
-    {
-      res.send({message:"not ready"});
-      return;
-    }
-    res.send({message:"111"});
+app.get('/api/article/:code', async (req, res) => {
+  const mongoAsync = staticExport.mongoAsync;
+  if (!mongoAsync.ready) {
+    res.send({ message: 'not ready' });
+    return;
   }
-);
+  res.send({ message: '121' });
+});
+
+app.get('/api/getArticles', async (req, res) => {
+  const mongoAsync = staticExport.mongoAsync;
+  if (!mongoAsync.ready) {
+    res.send({ message: 'not ready' });
+    return;
+  }
+  const data = await getArticles();
+  res.send({ message: '111', data });
+});
 
 //
 // Register API middleware

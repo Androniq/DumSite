@@ -12,6 +12,18 @@ import Home from './Home';
 import Layout from '../../components/Layout';
 
 async function action({ fetch }) {
+  // const articlesResp = await fetch('/getArticles');
+  // const articlesData = await articlesResp.json();
+  return {
+    title: 'Головна',
+    chunks: ['home'],
+    component: (
+      <Layout>
+        <Home news={[]} articles={[]} />
+      </Layout>
+    ),
+  };
+
   const resp = await fetch('/graphql', {
     body: JSON.stringify({
       query: '{news{title,link,content}}',

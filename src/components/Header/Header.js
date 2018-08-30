@@ -19,31 +19,17 @@ import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import logo from './logo.png';
 
 class Header extends React.Component {
-	constructor(props)
-	{
-		super(props);
-		this.state = {
-			toggle:false,
-			buttonClass: s.myButton
-		};		
-		this.myClick = this.myClick.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggle: false,
+      buttonClass: s.myButton,
+    };
+  }
 
-	myClick()
-	{	
-		console.log('click');
-		this.setState({toggle: !this.state.toggle}, () =>{
-			if (this.state.toggle){
-				this.setState({buttonClass: s.myButton2})
-			}else {
-				this.setState({buttonClass: s.myButton})
-			}
-		})
-		
-	}
-	
   render() {
     return (
       <div className={s.root}>
@@ -51,23 +37,15 @@ class Header extends React.Component {
           <Navigation />
           <Link className={s.brand} to="/">
             <img
-              src={logoUrl}
+              src={logo}
               srcSet={`${logoUrl2x} 2x`}
               width="38"
               height="38"
               alt="React"
             />
-            <span className={s.brandTxt}>Your 111р Company</span>
+            <span className={s.brandTxt}>ДУМ</span>
           </Link>
-          <div className={s.banner}>
-            <h1 className={s.bannerTitle}>React</h1>
-            <p className={s.bannerDesc}>Complex web apps made easy</p>
-			<ButtonToolbar>
-				<ButtonGroup name="b">
-					<Button className={this.state.buttonClass} onClick={this.myClick}>Кнопка 1</Button>
-				</ButtonGroup>
-			</ButtonToolbar>
-          </div>
+          <div className={s.banner} />
         </div>
       </div>
     );
