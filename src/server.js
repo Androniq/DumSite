@@ -31,7 +31,7 @@ import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import { getArticles, getArticleInfo, serverReady } from './serverLogic.js';
+import { getArticles, getArticleInfo, serverReady, findOrCreateUser } from './serverLogic.js';
 import { GOOGLE_CLIENT_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID } from '../ids.js';
 
@@ -87,7 +87,19 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+var session = require('cookie-session');
+
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(session({ secret: "anything" }));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -100,11 +112,12 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000',
+      callbackURL: 'http://localhost:3000/login/google/callback',      
     },
     (accessToken, refreshToken, profile, done) => {
-      User.findOrCreate({ googleId: profile.id }, (err, user) =>
-        done(err, user),
+      findOrCreateUser(profile.id, "google", profile).then(
+        (user) => done(null, user),
+        (err) => done(err, null)
       );
     },
   ),
@@ -135,28 +148,17 @@ app.get(
   '/login/google',
   passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.me'],
-    client_id: GOOGLE_CLIENT_ID,
     session: true,
   }),
-);
-app.get(
-  '/login/google/return',
-  passport.authenticate('google', {
-    failureRedirect: '/login',
-    session: true,
-  }),
-  (req, res) => {
-    const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
-    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-    res.redirect('/');
-  },
 );
 
 app.get(
   '/login/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/login', session: true }),
   (req, res) => {
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
+    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
     res.redirect('/');
   },
 );
@@ -166,14 +168,17 @@ app.get(
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
   const code = req.params.code;
-  const articleData = await getArticleInfo(code);
+  const articleData = await getArticleInfo(code, req.user);
   res.send({ articleData });
 });
 
 app.get('/api/getArticles', async (req, res) => {
   await serverReady();
   const data = await getArticles();
-  res.send({ data });
+  console.info('--------------------- !!! ---------------------')
+  console.info(req.user);
+  console.info('--------------------- *** ---------------------')
+  res.send({ data, user:[req.user] });
 });
 
 //

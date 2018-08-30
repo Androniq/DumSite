@@ -18,8 +18,6 @@ async function action({ fetch }, params) {
     method: 'GET',
   });
   const json = await articlesResp.json();
-  console.info(json);
-  console.info(articlesResp);
   return {
     chunks: ['Article'],
     title,

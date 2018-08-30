@@ -1,11 +1,11 @@
 import { mongoAsync } from './serverStartup';
 
 export async function serverReady() {
-  if (mongoAsync.ready) {
-    return;
-  }
+  if (mongoAsync.ready) { return; }
   await mongoAsync.serverReadyPromise;
 }
+
+// local utilities
 
 function max(array) {
   const len = array.length;
@@ -75,11 +75,24 @@ function shortLabel(str) {
   return `${str.substr(0, maxlen - 2)}...`;
 }
 
+// Authentication
+
+export async function findOrCreateUser(token, type, profile)
+{
+  var user = await mongoAsync.dbCollections.users.findOne({ "googleId" : token });
+  if (user) { return user; }
+  user = await mongoAsync.dbCollections.users.insert({ "googleId" : token, "profile" : profile });
+  return user;
+}
+
+// API
+
 export async function getArticles() {
   return await mongoAsync.dbCollections.articles.find().toArray();
 }
 
-export async function getArticleInfo(url) {
+export async function getArticleInfo(url, user) {
+  return user;
   const article = await mongoAsync.dbCollections.articles.findOne({ Url: url });
   const loadData = [];
   const voteResults = [];
@@ -101,5 +114,6 @@ export async function getArticleInfo(url) {
         .then(it => (voteItem.popular = it)),
     );
   });
+  await Promise.all(loadData);
   return article;
 }

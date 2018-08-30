@@ -24,10 +24,6 @@ import logo from './logo.png';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      toggle: false,
-      buttonClass: s.myButton,
-    };
   }
 
   render() {
