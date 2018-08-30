@@ -13,7 +13,11 @@ import Article from './Article';
 
 const title = 'Article Page';
 
-function action() {
+async function action({ fetch }, params) {
+  const articlesResp = await fetch('/api/article/' + params[0], { method: 'GET' });
+  var json = await articlesResp.json();
+  console.info(json);
+  console.info(articlesResp);
   return {
     chunks: ['Article'],
     title,

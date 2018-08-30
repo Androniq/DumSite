@@ -1,6 +1,19 @@
 export const mongoClient = require('mongodb').MongoClient;
 
-export var mongoAsync = { "ready": false };
+export var mongoAsyncInternal = {};
+
+export var mongoAsync =
+{
+    "ready": false,
+    "serverReadyPromise": new Promise((resolve, reject) =>
+    {        
+        mongoAsyncInternal.serverReadyTrigger = resolve;
+        if (mongoAsync && mongoAsync.ready)
+        {
+            resolve();
+        }
+    })
+};
 
 const defaultCollections = ["articles", "arguments", "colors", "priorities", "votes"];
 
@@ -41,8 +54,29 @@ async function getDbCollections()
       const dbColors = await getCollection(db, 'Colors');
       const dbPopularVote = await getCollection(db, 'PopularVote');
 
+      mongoAsync.dbCollections =
+      {
+          articles: dbArticles,
+          votes: dbVotes,
+          priorities: dbPriorities,
+          arguments: dbArguments,
+          colors: dbColors,
+          popularVote: dbPopularVote
+      };
+
+      var votesPreload = await dbVotes.find().toArray();
+      var prioritiesPreload = await dbPriorities.find().toArray();
+      var colorsPreload = await dbColors.find().toArray();
+      
+      mongoAsync.preloads =
+      {
+          votes: votesPreload,
+          priorities: prioritiesPreload,
+          colors: colorsPreload
+      };
+
       mongoAsync.ready = true;
-      mongoAsync.dbCollections = { articles: dbArticles, votes: dbVotes, priorities: dbPriorities, arguments: dbArguments };
+      mongoAsyncInternal.serverReadyTrigger();
     });
 }
 

@@ -31,7 +31,9 @@ import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import { MyFunc, getArticles } from './serverLogic.js';
+import { getArticles, getArticleInfo, serverReady } from './serverLogic.js';
+import { GOOGLE_CLIENT_SECRET } from '../secret.js';
+import { GOOGLE_CLIENT_ID } from '../ids.js';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -87,18 +89,36 @@ app.use((err, req, res, next) => {
 
 app.use(passport.initialize());
 
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+// Use the GoogleStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Google
+//   profile), and invoke a callback with a user object.
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000"
+  },  
+  function(accessToken, refreshToken, profile, done) {
+       User.findOrCreate({ googleId: profile.id }, function (err, user) {
+         return done(err, user);
+       });
+  }
+));
+
 app.get(
   '/login/facebook',
   passport.authenticate('facebook', {
     scope: ['email', 'user_location'],
-    session: false,
+    session: true,
   }),
 );
 app.get(
   '/login/facebook/return',
   passport.authenticate('facebook', {
     failureRedirect: '/login',
-    session: false,
+    session: true,
   }),
   (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
@@ -108,35 +128,47 @@ app.get(
   },
 );
 
-// User requests
+app.get(
+  '/login/google',
+  passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/plus.me'],
+    client_id: GOOGLE_CLIENT_ID,
+    session: true,
+  }),
+);
+app.get(
+  '/login/google/return',
+  passport.authenticate('google', {
+    failureRedirect: '/login',
+    session: true,
+  }),
+  (req, res) => {
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
+    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    res.redirect('/');
+  },
+);
 
-app.get('/myrequest', async (req, res) => {
-  const mongoAsync = staticExport.mongoAsync;
-  if (!mongoAsync.ready) {
-    res.send({ message: 'not ready' });
-    return;
-  }
-  MyFunc();
-  res.send({ message: '111' });
-});
+app.get('/login/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+// API
 
 app.get('/api/article/:code', async (req, res) => {
-  const mongoAsync = staticExport.mongoAsync;
-  if (!mongoAsync.ready) {
-    res.send({ message: 'not ready' });
-    return;
-  }
-  res.send({ message: '121' });
+  await serverReady();
+  var code = req.params.code;
+  var articleData = await getArticleInfo(code);
+  res.send({ articleData: articleData });
 });
 
 app.get('/api/getArticles', async (req, res) => {
-  const mongoAsync = staticExport.mongoAsync;
-  if (!mongoAsync.ready) {
-    res.send({ message: 'not ready' });
-    return;
-  }
+  await serverReady();
   const data = await getArticles();
-  res.send({ message: '111', data });
+  res.send({ data });
 });
 
 //
@@ -202,7 +234,7 @@ app.get('*', async (req, res, next) => {
       if (chunks[chunk]) {
         chunks[chunk].forEach(asset => scripts.add(asset));
       } else if (__DEV__) {
-        throw new Error(`Chunk with name '${chunk}' cannot be found`);
+        console.error(`Chunk with name '${chunk}' cannot be found`);
       }
     };
     addChunk('client');
