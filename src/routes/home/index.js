@@ -13,9 +13,7 @@ import Layout from '../../components/Layout';
 
 async function action({ fetch }) {
   const articlesResp = await fetch('/api/getArticles', { method: 'GET' });
-  console.info(articlesResp);
   const json = await articlesResp.json();
-  console.info(json);
   return {
     title: 'Головна',
     chunks: ['home'],

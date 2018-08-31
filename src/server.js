@@ -31,9 +31,15 @@ import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
-import { getArticles, getArticleInfo, serverReady, findOrCreateUser } from './serverLogic.js';
-import { GOOGLE_CLIENT_SECRET } from '../secret.js';
-import { GOOGLE_CLIENT_ID } from '../ids.js';
+import session from 'express-session';
+import {
+  getArticles,
+  getArticleInfo,
+  serverReady,
+  findOrCreateUser,
+} from './serverLogic.js';
+import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
+import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -50,8 +56,6 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 const app = express();
 
-const staticExport = require('./serverStartup.js');
-
 //
 // If you are using proxy from external machine, you can set TRUST_PROXY env
 // Default is to trust proxy headers only from loopback interface.
@@ -62,9 +66,25 @@ app.set('trust proxy', config.trustProxy);
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 app.use(express.static(path.resolve(__dirname, 'public')));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+
+// var session = require('express-session');
+
+// app.use(express.static('public'));
+app.use(
+  session({
+    secret: 'anything',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  }),
+);
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //
 // Authentication
@@ -87,38 +107,82 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-var session = require('cookie-session');
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(session({ secret: "anything" }));
-
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 // Use the GoogleStrategy within Passport.
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials (in this case, an accessToken, refreshToken, and Google
 //   profile), and invoke a callback with a user object.
+
 passport.use(
   new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/login/google/callback',      
+      callbackURL: 'http://mydomain.example.com:3000/login/google/callback',
+      passReqToCallback: false,
     },
     (accessToken, refreshToken, profile, done) => {
-      findOrCreateUser(profile.id, "google", profile).then(
-        (user) => done(null, user),
-        (err) => done(err, null)
+      if (!profile) {
+        // if we are here, it means that passReqToCallback is set to true
+        // idk what to do here ^^
+        return;
+      }
+      findOrCreateUser(profile.id, 'google', profile).then(
+        user => done(null, user),
+        err => done(err, null),
       );
+    },
+  ),
+);
+
+app.get(
+  '/login/google',
+  passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/plus.me'],
+    session: true,
+    authInfo: true,
+  }),
+);
+
+app.get(
+  '/login/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login',
+    session: true,
+  }),
+  (req, res) => {
+    console.info('ADWADAD');
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
+    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    res.redirect('/');
+  },
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: FACEBOOK_APP_ID,
+      clientSecret: FACEBOOK_APP_SECRET,
+      callbackURL: 'http://mydomain.example.com:3000/auth/facebook/callback',
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOrCreate(null, (err, user) => {
+        if (err) {
+          return done(err);
+        }
+        done(null, user);
+      });
     },
   ),
 );
@@ -131,30 +195,11 @@ app.get(
   }),
 );
 app.get(
-  '/login/facebook/return',
+  '/login/facebook/callback',
   passport.authenticate('facebook', {
     failureRedirect: '/login',
     session: true,
   }),
-  (req, res) => {
-    const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
-    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-    res.redirect('/');
-  },
-);
-
-app.get(
-  '/login/google',
-  passport.authenticate('google', {
-    scope: ['https://www.googleapis.com/auth/plus.me'],
-    session: true,
-  }),
-);
-
-app.get(
-  '/login/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login', session: true }),
   (req, res) => {
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
     const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
@@ -175,10 +220,10 @@ app.get('/api/article/:code', async (req, res) => {
 app.get('/api/getArticles', async (req, res) => {
   await serverReady();
   const data = await getArticles();
-  console.info('--------------------- !!! ---------------------')
+  console.info('--------------------- !!! ---------------------');
   console.info(req.user);
-  console.info('--------------------- *** ---------------------')
-  res.send({ data, user:[req.user] });
+  console.info('--------------------- *** ---------------------');
+  res.send({ data, user: [req.user] });
 });
 
 //
