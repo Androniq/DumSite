@@ -87,7 +87,7 @@ export async function findOrCreateUser(token, type, profile)
 
 // API
 
-export async function getArticles() {
+export async function getArticles(user) {
   return await mongoAsync.dbCollections.articles.find().toArray();
 }
 

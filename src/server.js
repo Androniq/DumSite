@@ -32,6 +32,7 @@ import schema from './data/schema';
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import session from 'express-session';
+//import MongoDBStore from 'connect-mongodb-session';
 import {
   getArticles,
   getArticleInfo,
@@ -66,25 +67,43 @@ app.set('trust proxy', config.trustProxy);
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 app.use(express.static(path.resolve(__dirname, 'public')));
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-
-// var session = require('express-session');
-
-// app.use(express.static('public'));
-app.use(
-  session({
-    secret: 'anything',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  }),
-);
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
+
+// MongoDBStore
+
+var MongoDBStore = require('connect-mongodb-session')(session);
+var store = new MongoDBStore({
+  uri: 'mongodb://localhost:27017',
+  databaseName: 'DumGrammarSite',
+  collection: 'Sessions'
+}, function(error)
+{
+  console.error(error);
+});
+
+store.on('connected', function() {
+  store.client; // The underlying MongoClient object from the MongoDB driver
+});
+ 
+// Catch errors
+store.on('error', function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
+
+app.use(
+  session({
+    secret: 'anything',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false },
+    store: store
+  }),
+);
 
 //
 // Authentication
@@ -213,16 +232,24 @@ app.get(
 
 // API
 
+function getUser(req)
+{
+  if (req && req.session && req.session.passport)
+  {
+    return req.session.passport.user;
+  }
+  return null;
+}
+
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
-  const code = req.params.code;
-  const articleData = await getArticleInfo(code, req.user);
+  const articleData = await getArticleInfo(req.params.code, getUser(req));
   res.send({ articleData });
 });
 
 app.get('/api/getArticles', async (req, res) => {
   await serverReady();
-  const data = await getArticles(req.user);
+  const data = await getArticles(getUser(req));
   res.send({ data });
 });
 
