@@ -92,7 +92,6 @@ export async function getArticles() {
 }
 
 export async function getArticleInfo(url, user) {
-  return user;
   const article = await mongoAsync.dbCollections.articles.findOne({ Url: url });
   const loadData = [];
   const voteResults = [];

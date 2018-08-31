@@ -175,14 +175,17 @@ passport.use(
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
       callbackURL: 'http://mydomain.example.com:3000/auth/facebook/callback',
+      passReqToCallback: false
     },
     (accessToken, refreshToken, profile, done) => {
-      User.findOrCreate(null, (err, user) => {
-        if (err) {
-          return done(err);
-        }
-        done(null, user);
-      });
+      if (!profile) {
+        // if we are here, it means that passReqToCallback is set to true
+        // idk what to do here ^^
+        return;
+      }
+      findOrCreateUser(profile.id, 'facebook', profile).then(
+        user => done(null, user),
+        err => done(err, null));
     },
   ),
 );
@@ -219,11 +222,8 @@ app.get('/api/article/:code', async (req, res) => {
 
 app.get('/api/getArticles', async (req, res) => {
   await serverReady();
-  const data = await getArticles();
-  console.info('--------------------- !!! ---------------------');
-  console.info(req.user);
-  console.info('--------------------- *** ---------------------');
-  res.send({ data, user: [req.user] });
+  const data = await getArticles(req.user);
+  res.send({ data });
 });
 
 //
