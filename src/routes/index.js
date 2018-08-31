@@ -45,6 +45,7 @@ const routes = {
     },
 
     {
+      name: "Article",
       path: '/article/(.*)',
       load: () => import(/* webpackChunkName: 'article' */ './article'),
     },

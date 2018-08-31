@@ -18,12 +18,13 @@ async function action({ fetch }, params) {
     method: 'GET',
   });
   const json = await articlesResp.json();
+  var articleData = json.articleData;
   return {
-    chunks: ['Article'],
+    chunks: ['article'],
     title,
     component: (
       <Layout>
-        <Article title={title} />
+        <Article title={title} data={articleData} />
       </Layout>
     ),
   };

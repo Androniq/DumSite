@@ -85,6 +85,15 @@ var store = new MongoDBStore({
   console.error(error);
 });
 
+function getUser(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
+{
+  if (req && req.session && req.session.passport)
+  {
+    return req.session.passport.user;
+  }
+  return null;
+}
+
 store.on('connected', function() {
   store.client; // The underlying MongoClient object from the MongoDB driver
 });
@@ -180,7 +189,6 @@ app.get(
     session: true,
   }),
   (req, res) => {
-    console.info('ADWADAD');
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
     const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
     res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
@@ -231,15 +239,6 @@ app.get(
 );
 
 // API
-
-function getUser(req)
-{
-  if (req && req.session && req.session.passport)
-  {
-    return req.session.passport.user;
-  }
-  return null;
-}
 
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
