@@ -19,24 +19,7 @@ async function action({ fetch }) {
     chunks: ['home'],
     component: (
       <Layout>
-        <Home news={[]} articles={json.data} />
-      </Layout>
-    ),
-  };
-
-  const resp = await fetch('/graphql', {
-    body: JSON.stringify({
-      query: '{news{title,link,content}}',
-    }),
-  });
-  const { data } = await resp.json();
-  if (!data || !data.news) throw new Error('Failed to load the news feed.');
-  return {
-    title: 'React Starter Kit',
-    chunks: ['home'],
-    component: (
-      <Layout>
-        <Home news={data.news} />
+        <Home articles={json.data} />
       </Layout>
     ),
   };

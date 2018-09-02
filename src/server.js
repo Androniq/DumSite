@@ -37,7 +37,7 @@ import {
   getArticles,
   getArticleInfo,
   serverReady,
-  findOrCreateUser,
+  findOrCreateUser
 } from './serverLogic.js';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
@@ -67,11 +67,11 @@ app.set('trust proxy', config.trustProxy);
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 app.use(express.static(path.resolve(__dirname, 'public')));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
 
 // MongoDBStore
 
@@ -82,16 +82,25 @@ var store = new MongoDBStore({
   collection: 'Sessions'
 }, function(error)
 {
-  console.error(error);
+  if (error)
+  {
+    console.error(error);
+  }  
 });
 
-function getUser(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
+function getProfile(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
 {
   if (req && req.session && req.session.passport)
   {
     return req.session.passport.user;
   }
   return null;
+}
+
+function getUser(req)
+{
+  //return await profileToUser(getProfile(req));
+  return getProfile(req);
 }
 
 store.on('connected', function() {
@@ -106,7 +115,7 @@ store.on('error', function(error) {
 
 app.use(
   session({
-    secret: 'anything',
+    secret: 'anythingadwdfewg rwgfer',
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
@@ -242,7 +251,7 @@ app.get(
 
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
-  const articleData = await getArticleInfo(req.params.code, getUser(req));
+  const articleData = await getArticleInfo(req.params.code, await getUser(req));
   res.send({ articleData });
 });
 
@@ -292,11 +301,12 @@ app.get('*', async (req, res, next) => {
     const context = {
       insertCss,
       fetch,
+      user: getUser(req),
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
     };
-
+    
     const route = await router.resolve(context);
 
     if (route.redirect) {
