@@ -26,15 +26,27 @@ class Navigation extends React.Component {
         </Link>
         <span className={s.spacer}> | </span>
         <UserContext.Consumer>
-          {user => <span>{user?user.profile.displayName:"NO USER"}</span>}
+          {user => user ? (
+            <>
+              <Link className={s.link} to="/account">
+                {user.profile.displayName}
+              </Link>
+              <Link className={s.link} to="/logout">
+                Вийти
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className={s.link} to="/login">
+                Увійти
+              </Link>
+              <span className={s.spacer}>чи</span>
+              <Link className={cx(s.link, s.highlight)} to="/register">
+                Зареєструватися
+              </Link>
+            </>
+          )}
         </UserContext.Consumer>
-        <Link className={s.link} to="/login">
-          Увійти
-        </Link>
-        <span className={s.spacer}>чи</span>
-        <Link className={cx(s.link, s.highlight)} to="/register">
-          Зареєструватися
-        </Link>
       </div>
     );
   }
