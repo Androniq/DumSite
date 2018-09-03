@@ -12,6 +12,7 @@ import cx from 'classnames';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.css';
 import Link from '../Link';
+import { UserContext } from '../../UserContext.js';
 
 class Navigation extends React.Component {
   render() {
@@ -24,6 +25,9 @@ class Navigation extends React.Component {
           Контакти
         </Link>
         <span className={s.spacer}> | </span>
+        <UserContext.Consumer>
+          {user => <span>{user?user.profile.displayName:"NO USER"}</span>}
+        </UserContext.Consumer>
         <Link className={s.link} to="/login">
           Увійти
         </Link>

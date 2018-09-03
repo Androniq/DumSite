@@ -18,6 +18,7 @@ import createFetch from './createFetch';
 import history from './history';
 import { updateMeta } from './DOMUtils';
 import router from './router';
+import { UserContext } from './UserContext';
 
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
@@ -76,9 +77,11 @@ async function onLocationChange(location, action) {
       return;
     }
 
+    var user = {profile:{displayName:"clientRender"}};
+
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
-      <App context={context}>{route.component}</App>,
+      <UserContext.Provider value={user}><App context={context}>{route.component}</App></UserContext.Provider>,
       container,
       () => {
         if (isInitialRender) {

@@ -41,6 +41,7 @@ import {
 } from './serverLogic.js';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
+import { UserContext } from './UserContext.js';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -316,7 +317,7 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <App context={context}>{route.component}</App>,
+      <UserContext.Provider value={context.user}><App context={context}>{route.component}</App></UserContext.Provider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
 

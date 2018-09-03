@@ -26,7 +26,6 @@ class Page extends React.Component {
     this.callApi()
       .then(res => {
         this.setState({ response: res.message });
-        console.info(res);
       })
       .catch(err => console.log(err));
   }
