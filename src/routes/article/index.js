@@ -11,8 +11,6 @@ import React from 'react';
 import Layout from '../../components/Layout';
 import Article from './Article';
 
-const title = 'Article Page';
-
 async function action({ fetch }, params) {
   const articlesResp = await fetch(`/api/article/${params[0]}`, {
     method: 'GET',
@@ -21,10 +19,10 @@ async function action({ fetch }, params) {
   var articleData = json.articleData;
   return {
     chunks: ['article'],
-    title,
+    title: articleData.article && articleData.article.PageTitle,
     component: (
       <Layout>
-        <Article title={title} data={articleData} />
+        <Article data={articleData} />
       </Layout>
     ),
   };

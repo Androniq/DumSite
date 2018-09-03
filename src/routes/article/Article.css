@@ -1,4 +1,26 @@
-.shostam
+.header
 {
-    
+    text-align: center;
+}
+
+.tokenHeader
+{
+    padding: 10px;
+    margin: 10px 10px 10px 10px;
+}
+
+.tokenBase
+{
+    font-weight: bold;
+}
+
+.tokenA
+{
+    text-align: left;
+}
+
+.tokenB
+{
+    text-align: right;
+    float: right;
 }
