@@ -68,11 +68,11 @@ app.set('trust proxy', config.trustProxy);
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cookieParser());
 
 // MongoDBStore
 
@@ -260,6 +260,10 @@ app.get('/api/getArticles', async (req, res) => {
   await serverReady();
   const data = await getArticles(getUser(req));
   res.send({ data });
+});
+
+app.get('/api/whoami', async (req, res) => {
+  res.send({ user: getUser(req) });
 });
 
 //

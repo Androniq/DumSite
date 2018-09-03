@@ -77,8 +77,19 @@ async function onLocationChange(location, action) {
       return;
     }
 
-    var user = {profile:{displayName:"clientRender"}};
+    var user = null;
 
+    try
+    {
+      var whoami = await fetch('/api/whoami');
+      var whoamiJson = await whoami.json();
+      user = whoamiJson.user;
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+    
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
       <UserContext.Provider value={user}><App context={context}>{route.component}</App></UserContext.Provider>,
