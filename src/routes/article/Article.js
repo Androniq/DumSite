@@ -24,10 +24,10 @@ chartData(articleData)
 {
   let data =
   {
-    labels: ["A", "AB", "EQ", "BA", "B", "S"],
+    labels: articleData.voteResults.map(function(element) { return element.vote.ShortDescription; }),
     datasets: [{
       label: 'Популярне голосування, %',
-      data: [],
+      data: articleData.voteResults.map(function(element) { return element.popular; }),
       backgroundColor: [
         'rgba(255, 0, 0, 0.2)',
         'rgba(255, 255, 0, 0.2)',
@@ -47,11 +47,6 @@ chartData(articleData)
       borderWidth: 1
     }]
   };
-  if (articleData)
-  {
-    data.labels = articleData.voteResults.map(function(element) { return element.vote.ShortDescription; });
-    data.datasets[0].data = articleData.voteResults.map(function(element) { return element.popular; });
-  }
   return data;
 }
 
