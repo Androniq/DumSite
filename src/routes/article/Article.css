@@ -6,7 +6,10 @@
 .tokenHeader
 {
     padding: 10px;
-    margin: 10px 10px 10px 10px;
+    margin: 0px auto;
+    min-height: 20px;
+    min-width: 480px;
+    max-width: 980px;    
 }
 
 .tokenBase
@@ -17,10 +20,17 @@
 .tokenA
 {
     text-align: left;
+    float: left;    
 }
 
 .tokenB
 {
     text-align: right;
     float: right;
+}
+
+.generalResult
+{
+    font-weight: bold;
+    text-align: center;
 }

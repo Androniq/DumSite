@@ -20,7 +20,7 @@ class Article extends React.Component {
           <span className={classnames(s.tokenBase, s.tokenA)}>{this.props.data.article.TokenA}</span>
           <span className={classnames(s.tokenBase, s.tokenB)}>{this.props.data.article.TokenB}</span>
         </div>
-        <span>{this.props.data.result.ColorCode}</span>
+        <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
       </div>
     );
   }
