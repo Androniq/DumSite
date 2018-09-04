@@ -143,8 +143,11 @@ export async function getArticleInfo(url, user) {
 	// for each vote option...
 	for (let voteIndex = 0; voteIndex < voteResults.length; voteIndex++)
 	{
-		voteResults[voteIndex].vote.index = voteIndex; // temporarily store index in vote option to navigate arrays easier within this method
-		voteResults[voteIndex].vote.priorityCount = 0; // how many priorities (categories of arguments) speak in favor of this option
+		let vote = voteResults[voteIndex].vote;
+		vote.index = voteIndex; // temporarily store index in vote option to navigate arrays easier within this method
+		vote.priorityCount = 0; // how many priorities (categories of arguments) speak in favor of this option
+		vote.ShortDescription = vote.ShortDescription.replace('%A%', article.ShortA).replace('%B%', article.ShortB);
+		vote.ShortestDescription = vote.ShortDescription.replace('%A%', shortLabel(article.ShortA)).replace('%B%', shortLabel(article.ShortB));
 		let popularVote = voteResults[voteIndex].popular;
 		totalPopular += popularVote; // add up to total number of popular votes
 		popularCounter.push(popularVote); // push the number into the array
@@ -192,7 +195,7 @@ export async function getArticleInfo(url, user) {
 					let vote = voteResults[voteIndex].vote;
 					if (vote.ID === argument.Vote) // find the vote option it favors
 					{
-						argument.voteFor = vote.shortDescription; // store short description here for client's convenience (redundant but handy data)
+						argument.voteFor = vote.ShortDescription; // store short description here for client's convenience (redundant but handy data)
 						voteCounter[voteIndex]++; // update the counter
 					}
 				}
@@ -216,7 +219,7 @@ export async function getArticleInfo(url, user) {
 		entry.voteFor = '-';
 		if (priorityVote !== null)
 		{
-			entry.voteFor = priorityVote.shortDescription; // another convenient redundancy
+			entry.voteFor = priorityVote.ShortDescription; // another convenient redundancy
 			priorityVote.priorityCount++; // probably also redundant
 			globalVoteCounter[priorityVote.index]++; // update the counter on the vote option
 		}
@@ -246,11 +249,11 @@ export async function getArticleInfo(url, user) {
 			color = element;
 	});
 
-	if (color.swap) // this means we must swap options A and B so that wrong one is always displayed on the left
+	if (color.Swap) // this means we must swap options A and B so that wrong one is always displayed on the left
 	{
-		var swap = article.tokenA;
-		article.tokenA = article.tokenB;
-		article.tokenB = swap;
+		var swap = article.TokenA;
+		article.TokenA = article.TokenB;
+		article.TokenB = swap;
 
 		// order of voteResults helps client display vote results on the chart correctly,
 		// so we also swap A with B and AB with BA
@@ -262,13 +265,13 @@ export async function getArticleInfo(url, user) {
 		{
 			let res = voteResults[voteIndex];
 			let vote = res.vote;
-			let code = vote.code;
+			let code = vote.Code;
 			switch (code)
 			{
-				case 'A': voteA = voteIndex; vote.code = 'B'; break;
-				case 'AB': voteAB = voteIndex; vote.code = 'BA'; break;
-				case 'BA': voteBA = voteIndex; vote.code = 'AB'; break;
-				case 'B': voteB = voteIndex; vote.code = 'A'; break;
+				case 'A': voteA = voteIndex; vote.Code = 'B'; break;
+				case 'AB': voteAB = voteIndex; vote.Code = 'BA'; break;
+				case 'BA': voteBA = voteIndex; vote.Code = 'AB'; break;
+				case 'B': voteB = voteIndex; vote.Code = 'A'; break;
 			}
 		}
 
@@ -293,12 +296,12 @@ export async function getArticleInfo(url, user) {
 	// finally, we form the client results into a single object
 	var articleData = 
 	{
-		"article" : article,
-		"totalPopular" : totalPopular,
-		"priorityList" : priorityList,
-		"voteResults" : voteResults,
-		"result" : color,
-		"ownVote" : ownVote,
+		article : article,
+		totalPopular : totalPopular,
+		priorityList : priorityList,
+		voteResults : voteResults,
+		result : color,
+		ownVote : ownVote,
 	};
 	return articleData;
 }

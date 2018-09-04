@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Article.css';
 import classnames from 'classnames';
+import Chart from 'react-chartjs-2';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -10,6 +11,55 @@ class Article extends React.Component {
   state = {
     article: null,
   };
+
+chartData(articleData)
+{
+  var data =
+  {
+    labels: ["A", "AB", "EQ", "BA", "B", "S"],
+    datasets: [{
+      label: 'Популярне голосування, %',
+      data: [],
+      backgroundColor: [
+        'rgba(255, 0, 0, 0.2)',
+        'rgba(255, 255, 0, 0.2)',
+        'rgba(0, 255, 0, 0.2)',
+        'rgba(255, 255, 0, 0.2)',
+        'rgba(255, 0, 0, 0.2)',
+        'rgba(0, 0, 255, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 255, 0, 1)',
+        'rgba(0, 255, 0, 1)',
+        'rgba(255, 255, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(0, 0, 255, 1)'
+      ],
+      borderWidth: 1
+    }]
+  };
+  if (articleData)
+  {
+    data.labels = articleData.voteResults.map(function(element) { return element.vote.ShortDescription; });
+    data.datasets[0].data = articleData.voteResults.map(function(element) { return element.popularVote; });
+  }
+  return data;
+}
+
+chartOptions()
+{
+  let options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  };
+  return options;
+}
 
   render() {
     return (
@@ -22,6 +72,7 @@ class Article extends React.Component {
         </div>
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
         <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
+        <Chart type="bar" data={this.chartData(this.props.data)} options={this.chartOptions()} />        
       </div>
     );
   }

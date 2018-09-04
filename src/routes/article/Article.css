@@ -15,25 +15,23 @@
     padding: 10px;
     margin: 0px auto;
     min-height: 20px;
-    min-width: 480px;
-    max-width: 980px;    
+    display: flex;
 }
 
 .tokenBase
 {
     font-weight: bold;
+    flex-grow: 1;
 }
 
 .tokenA
 {
     text-align: left;
-    float: left;    
 }
 
 .tokenB
 {
     text-align: right;
-    float: right;
 }
 
 .generalResult
