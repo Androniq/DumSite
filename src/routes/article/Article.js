@@ -50,7 +50,7 @@ chartData(articleData)
   if (articleData)
   {
     data.labels = articleData.voteResults.map(function(element) { return element.vote.ShortDescription; });
-    data.datasets[0].data = articleData.voteResults.map(function(element) { return element.popularVote; });
+    data.datasets[0].data = articleData.voteResults.map(function(element) { return element.popular; });
   }
   return data;
 }

@@ -115,9 +115,10 @@ export async function getArticleInfo(url, user) {
     loadData.push(
       mongoAsync.dbCollections.popularVote
         .countDocuments({ Article: article.ID, Vote: element.ID })
-        .then(it => (voteItem.popular = it)),
+        .then(it => voteItem.popular = it),
     );
-  });
+	});
+	
   if (isLoggedIn)
   {
     loadData.push(
