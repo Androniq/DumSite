@@ -110,10 +110,6 @@
     outline: none;
 }
 
-.pvButtonBase:checked
-{
-    box-shadow: 0 0 3pt 2pt cyan;
-}
 
 .pvButtonRed
 {
@@ -225,4 +221,14 @@
 {
     grid-row: 3;
     grid-column: 2;
+}
+
+.pvButtonCurrent
+{
+    box-shadow: 0 0 3pt 2pt #4080ff;
+}
+
+.pvButtonCurrent:focus
+{
+    box-shadow: 0 0 3pt 2pt #4080ff;
 }
