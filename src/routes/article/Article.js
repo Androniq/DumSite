@@ -13,7 +13,7 @@ class Article extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={s.infoArea}>
         <h3 className={s.header}>{this.props.data.article.PageTitle}</h3>
         <div className={s.tokenHeader}
           style={{backgroundColor: this.props.data.result.ColorCode, color: this.props.data.result.WhiteText ? "white" : "black"}}>
@@ -21,6 +21,7 @@ class Article extends React.Component {
           <span className={classnames(s.tokenBase, s.tokenB)}>{this.props.data.article.TokenB}</span>
         </div>
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
+        <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
       </div>
     );
   }

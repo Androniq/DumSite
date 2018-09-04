@@ -1,3 +1,10 @@
+.infoArea
+{
+    margin: 0px auto;
+    min-width: 480px;
+    max-width: 980px;    
+}
+
 .header
 {
     text-align: center;
