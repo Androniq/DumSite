@@ -96,11 +96,13 @@ export async function getArticleInfo(url, user) {
   const loadData = [];
   const voteResults = [];
   const votes = mongoAsync.preloads.votes;
-  const priorities = mongoAsync.preloads.priorities;
+	const priorities = mongoAsync.preloads.priorities;
+	
   let argumentList;
   let ownVote = 'N';
   let ownVoteInstance;
-  let isLoggedIn = user !== null;
+	let isLoggedIn = user !== null;
+	
   loadData.push(
     mongoAsync.dbCollections.arguments
       .find({ Article: article.ID })
@@ -108,7 +110,7 @@ export async function getArticleInfo(url, user) {
       .then(it => (argumentList = it)),
   );
   votes.forEach(element => {
-    const voteItem = { vote: element };
+    const voteItem = { vote: element, popular: 0 };
     voteResults.push(voteItem);
     loadData.push(
       mongoAsync.dbCollections.popularVote
@@ -126,13 +128,13 @@ export async function getArticleInfo(url, user) {
   }
   await Promise.all(loadData);
 
-  if (ownVoteInstance)
+	if (ownVoteInstance)
   {
     votes.forEach(element => 
     {
-      if (element.vote.ID === ownVoteInstance.Vote)
+      if (element.ID === ownVoteInstance.Vote)
       {
-        ownVote = element.vote.Code;
+        ownVote = element.Code;
       }
     })
   }
@@ -304,4 +306,45 @@ export async function getArticleInfo(url, user) {
 		ownVote : ownVote,
 	};
 	return articleData;
+}
+
+async function deleteAllVotes(userId, articleId)
+{
+	await mongoAsync.dbCollections.popularVote.deleteMany({ User: userId, Article: articleId });
+}
+
+export async function sendPopularVote(user, articleId, voteId)
+{
+	if (!user)
+		return { success: false, message: 'Error: not logged in' };
+
+	var res = await mongoAsync.dbCollections.popularVote.find({ Article: articleId, User: user._id }).toArray();
+
+	if (!voteId || voteId === 'null')
+	{
+		await deleteAllVotes(user._id, articleId);
+		return { success: true, message: 'Success (vote undone)' };
+	}
+
+	var additionalMessage = 'vote added';
+	var totalCount = res.length;	
+	if (totalCount > 1) // unexpected situation: more than single vote from current user on this article!
+	{
+		additionalMessage = 'suspicious: multiple votes detected and removed';
+		await deleteAllVotes(user._id, articleId); // purge all its votes before proceeding
+		totalCount = 0;
+	}
+	if (totalCount === 1) // there is exactly one vote: just update it
+	{
+		additionalMessage = 'vote updated';
+		var vote = res[0];
+		vote.Vote = voteId;
+		await mongoAsync.dbCollections.popularVote.update({ _id: vote._id }, vote);
+	}
+	else // there are no votes: create a new one
+	{
+		var newVote = { User: user._id, Vote: voteId, Article: articleId };
+		await mongoAsync.dbCollections.popularVote.insert(newVote);
+	}
+	return { success: true, message: 'Success (' + additionalMessage + ')' };
 }

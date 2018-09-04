@@ -5,13 +5,20 @@ import s from './Article.css';
 import classnames from 'classnames';
 import Chart from 'react-chartjs-2';
 import { UserContext } from '../../UserContext.js';
+import Popup from "reactjs-popup";
 
 class Article extends React.Component {
   static propTypes = {};
 
   state = {
-    article: null,
+    ownVote: 'N'
   };
+
+  constructor(props)
+  {
+    super(props);
+    this.state = { ownVote: props.data.ownVote };
+  }
 
 chartData(articleData)
 {
@@ -62,6 +69,33 @@ chartOptions()
   return options;
 }
 
+getVoteOption(code)
+{
+  return this.props.data.voteResults.find(function(element) { return element.vote.Code === code; });
+}
+
+clickVote(code)
+{
+  let optionId = this.getVoteOption(code).vote.ID;
+  if (code === this.state.ownVote)
+  {
+    optionId = 'null';
+    code = 'N';
+  }
+  return async () => this.clickVoteDo(code, optionId);
+}
+
+async clickVoteDo(code, optionId)
+{
+  var resp = await fetch(`/api/sendPopularVote/${this.props.data.article.ID}/${optionId}`);
+  var message = await resp.json();
+  if (message.success)
+  {
+    await this.setState({ ownVote: code });
+    this.props.data.ownVote = code;
+  }
+}
+
   render() {
     return (
       <div className={s.infoArea}>
@@ -77,7 +111,30 @@ chartOptions()
         <UserContext.Consumer>
           {user => user ? (
             <div className={s.buttonContainer}>
-              <button className={s.buttonVote}>Голосувати!</button>
+              <Popup trigger={<button className={s.buttonVote}>Голосувати!</button>} position="top center" modal>
+              
+                <div className={s.pvContainer}>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonRed, s.pvButtonA)} onClick={this.clickVote('A')}>
+                    {this.getVoteOption('A').vote.ShortestDescription}
+                  </button>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonYellow, s.pvButtonAB)} onClick={this.clickVote('AB')}>
+                    {this.getVoteOption('AB').vote.ShortestDescription}
+                  </button>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonBlue, s.pvButtonS)} onClick={this.clickVote('S')}>
+                    {this.getVoteOption('S').vote.ShortestDescription}
+                  </button>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonGreen, s.pvButtonEQ)} onClick={this.clickVote('EQ')}>
+                    {this.getVoteOption('EQ').vote.ShortestDescription}
+                  </button>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonRed, s.pvButtonB)} onClick={this.clickVote('B')}>
+                    {this.getVoteOption('B').vote.ShortestDescription}
+                  </button>
+                  <button className={classnames(s.pvButtonBase, s.pvButtonYellow, s.pvButtonBA)} onClick={this.clickVote('BA')}>
+                    {this.getVoteOption('BA').vote.ShortestDescription}
+                  </button>
+                </div>
+              
+              </Popup>              
               <button className={s.buttonVote}>Аргументувати...</button>
             </div>
           ) : (

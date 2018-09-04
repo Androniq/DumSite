@@ -37,7 +37,8 @@ import {
   getArticles,
   getArticleInfo,
   serverReady,
-  findOrCreateUser
+  findOrCreateUser,
+  sendPopularVote
 } from './serverLogic.js';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
@@ -250,10 +251,8 @@ app.get(
 
 // API
 
-app.get('/api/article/:code', async (req, res) => {
-  await serverReady();
-  const articleData = await getArticleInfo(req.params.code, await getUser(req));
-  res.send({ articleData });
+app.get('/api/whoami', async (req, res) => {
+  res.send({ user: getUser(req) });
 });
 
 app.get('/api/getArticles', async (req, res) => {
@@ -262,9 +261,18 @@ app.get('/api/getArticles', async (req, res) => {
   res.send({ data });
 });
 
-app.get('/api/whoami', async (req, res) => {
-  res.send({ user: getUser(req) });
+app.get('/api/article/:code', async (req, res) => {
+  await serverReady();
+  const articleData = await getArticleInfo(req.params.code, await getUser(req));
+  res.send({ articleData });
 });
+
+app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
+  await serverReady();
+  const result = await sendPopularVote(await getUser(req), req.params.articleId, req.params.voteId);
+  res.send(result);
+});
+
 
 //
 // Register API middleware

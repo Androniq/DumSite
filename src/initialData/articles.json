@@ -26,7 +26,6 @@
        "Owner": "4d17fb2a-b39c-4fb2-b575-6cae82773a51",
        "ShortA": "виглядати",
        "ShortB": "мати вигляд",
-       "RecentColor": "image://v1/4d17fb_b8718618558040049532c6f358251a4d~mv2.png/16_16/green.png",
        "PageTitle": "Виглядати чи мати вигляд?",
        "Keywords": "виглядати, гарно, з вікна"
     },
@@ -42,7 +41,6 @@
        "Owner": "4d17fb2a-b39c-4fb2-b575-6cae82773a51",
        "ShortA": "вірно",
        "ShortB": "правильно",
-       "RecentColor": "image://v1/4d17fb_d378b1f7405f48a7ad8bfd104696c54f~mv2.png/16_16/red.png",
        "PageTitle": "Вірно чи правильно?",
        "Keywords": "вірно, вірний, вірна, вірне, вірні, вірніше, точніше"
     },
@@ -58,7 +56,6 @@
        "Owner": "4d17fb2a-b39c-4fb2-b575-6cae82773a51",
        "ShortA": "приймати",
        "ShortB": "брати",
-       "RecentColor": "image://v1/4d17fb_d378b1f7405f48a7ad8bfd104696c54f~mv2.png/16_16/red.png",
        "PageTitle": "Приймати чи брати участь?",
        "Keywords": "участь, приймати, прийняти, брати, взяти"
     }

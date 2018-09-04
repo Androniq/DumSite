@@ -42,6 +42,7 @@
     "react-bootstrap": "^0.32.3",
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.4.1",
+    "reactjs-popup": "^1.2.0",
     "sequelize": "^4.37.10",
     "serialize-javascript": "^1.5.0",
     "source-map-support": "^0.5.6",
