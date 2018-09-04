@@ -104,11 +104,11 @@ async clickVoteDo(code, optionId)
   }
 }
 
-voteButton(code)
+voteButton(code, buttonStyle, colorStyle)
 {
   return (
-    <button className={classnames(s.pvButtonBase, s.pvButtonRed, s.pvButtonA, this.cssHighlight({code}))} onClick={this.clickVote({code})}>
-      {this.getVoteOption({code}).vote.ShortestDescription}
+    <button className={classnames(s.pvButtonBase, colorStyle, buttonStyle, this.cssHighlight(code))} onClick={this.clickVote(code)}>
+      {this.getVoteOption(code).vote.ShortestDescription}
     </button>
   );
 }
@@ -129,28 +129,14 @@ voteButton(code)
           {user => user ? (
             <div className={s.buttonContainer}>
               <Popup trigger={<button className={s.buttonVote}>Голосувати!</button>} position="top center" modal>
-              
                 <div className={s.pvContainer}>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonRed, s.pvButtonA, this.cssHighlight('A'))} onClick={this.clickVote('A')} checked>
-                    {this.getVoteOption('A').vote.ShortestDescription}
-                  </button>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonYellow, s.pvButtonAB, this.cssHighlight('AB'))} onClick={this.clickVote('AB')}>
-                    {this.getVoteOption('AB').vote.ShortestDescription}
-                  </button>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonBlue, s.pvButtonS, this.cssHighlight('S'))} onClick={this.clickVote('S')}>
-                    {this.getVoteOption('S').vote.ShortestDescription}
-                  </button>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonGreen, s.pvButtonEQ, this.cssHighlight('EQ'))} onClick={this.clickVote('EQ')}>
-                    {this.getVoteOption('EQ').vote.ShortestDescription}
-                  </button>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonRed, s.pvButtonB, this.cssHighlight('B'))} onClick={this.clickVote('B')}>
-                    {this.getVoteOption('B').vote.ShortestDescription}
-                  </button>
-                  <button className={classnames(s.pvButtonBase, s.pvButtonYellow, s.pvButtonBA, this.cssHighlight('BA'))} onClick={this.clickVote('BA')}>
-                    {this.getVoteOption('BA').vote.ShortestDescription}
-                  </button>
+                  {this.voteButton('A', s.pvButtonA, s.pvButtonRed)}
+                  {this.voteButton('AB', s.pvButtonAB, s.pvButtonYellow)}
+                  {this.voteButton('S', s.pvButtonS, s.pvButtonBlue)}
+                  {this.voteButton('EQ', s.pvButtonEQ, s.pvButtonGreen)}
+                  {this.voteButton('B', s.pvButtonB, s.pvButtonRed)}
+                  {this.voteButton('BA', s.pvButtonBA, s.pvButtonYellow)}
                 </div>
-              
               </Popup>              
               <button className={s.buttonVote}>Аргументувати...</button>
             </div>
