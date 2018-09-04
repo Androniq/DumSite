@@ -76,3 +76,16 @@
     box-shadow: 0 0 2pt 1pt cyan;
     outline: none;
 }
+
+.textNotAuthorized
+{
+    text-align: center;
+    color: lightslategray;
+    font-style: italic;
+    flex-grow: 1;
+}
+
+.containerNotAuthorized
+{
+    display: flex;
+}

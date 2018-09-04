@@ -4,6 +4,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Article.css';
 import classnames from 'classnames';
 import Chart from 'react-chartjs-2';
+import { UserContext } from '../../UserContext.js';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -73,10 +74,18 @@ chartOptions()
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
         <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
         <Chart type="bar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
-        <div className={s.buttonContainer}>
-          <button className={s.buttonVote}>Голосувати!</button>
-          <button className={s.buttonVote}>Аргументувати...</button>
-        </div>
+        <UserContext.Consumer>
+          {user => user ? (
+            <div className={s.buttonContainer}>
+              <button className={s.buttonVote}>Голосувати!</button>
+              <button className={s.buttonVote}>Аргументувати...</button>
+            </div>
+          ) : (
+            <div className={s.containerNotAuthorized}>
+              <span className={s.textNotAuthorized}>Щоб голосувати, потрібно авторизуватися</span>
+            </div>
+          )}
+        </UserContext.Consumer>
       </div>
     );
   }
