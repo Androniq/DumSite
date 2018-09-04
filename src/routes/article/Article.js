@@ -14,7 +14,7 @@ class Article extends React.Component {
 
 chartData(articleData)
 {
-  var data =
+  let data =
   {
     labels: ["A", "AB", "EQ", "BA", "B", "S"],
     datasets: [{
@@ -72,7 +72,11 @@ chartOptions()
         </div>
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
         <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
-        <Chart type="bar" data={this.chartData(this.props.data)} options={this.chartOptions()} />        
+        <Chart type="bar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
+        <div className={s.buttonContainer}>
+          <button className={s.buttonVote}>Голосувати!</button>
+          <button className={s.buttonVote}>Аргументувати...</button>
+        </div>
       </div>
     );
   }
