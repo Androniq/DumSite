@@ -136,6 +136,7 @@ li
     border-top-color: #a00000;
     border-bottom-color: #a00000;
     color: white;
+    text-shadow: 2px 2px #800000;
 }
 
 .pvButtonRed:active
@@ -155,6 +156,7 @@ li
     border-top-color: #a0a000;
     border-bottom-color: #a0a000;
     color: black;
+    text-shadow: 1px 1px #808000;
 }
 
 .pvButtonYellow:active
@@ -174,6 +176,7 @@ li
     border-top-color: #006800;
     border-bottom-color: #006800;
     color: white;
+    text-shadow: 2px 2px #004000;
 }
 
 .pvButtonGreen:active
@@ -193,6 +196,7 @@ li
     border-top-color: #0068a0;
     border-bottom-color: #0068a0;
     color: white;
+    text-shadow: 2px 2px #004080;
 }
 
 .pvButtonBlue:active
@@ -293,6 +297,12 @@ li
 {
     flex-grow: 1;
     font-weight: bold;
+}
+
+.priorityPopularOverride
+{
+    font-weight: bold;
+    text-align: center;
 }
 
 .priorityVoteFor

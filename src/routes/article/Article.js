@@ -60,7 +60,8 @@ chartOptions()
           beginAtZero: true
         }
       }]
-    }
+    },
+    maintainAspectRatio: true
   };
   return options;
 }
@@ -148,12 +149,22 @@ voteButton(code, buttonStyle, colorStyle)
             <Collapsible trigger={(
              <div className={s.priorityHeader}>
                 <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+                {priority.priority.popularOverride ? (
+                  <span className={s.priorityPopularOverride}>(популярне голосування)</span>
+                ) : (
+                  <></>
+                )}
                 <span className={s.priorityVoteFor}>{priority.voteFor}</span>
                 <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorClose)} />
               </div>
              )} triggerWhenOpen={(
               <div className={s.priorityHeader}>
                 <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+                {priority.priority.popularOverride ? (
+                  <span className={s.priorityPopularOverride}>(популярне голосування)</span>
+                ) : (
+                  <></>
+                )}
                 <span className={s.priorityVoteFor}>{priority.voteFor}</span>
                 <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorOpen)}/>
               </div>
