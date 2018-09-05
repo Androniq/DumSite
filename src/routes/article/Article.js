@@ -112,7 +112,6 @@ voteButton(code, buttonStyle, colorStyle)
   render() {
     return (
       <div className={s.infoArea}>
-        <h3 className={s.header}>{this.props.data.article.PageTitle}</h3>
         <div className={s.tokenHeader}
           style={{backgroundColor: this.props.data.result.ColorCode, color: this.props.data.result.WhiteText ? "white" : "black"}}>
           <span className={classnames(s.tokenBase, s.tokenA)}>{this.props.data.article.TokenA}</span>
@@ -120,7 +119,8 @@ voteButton(code, buttonStyle, colorStyle)
         </div>
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
         <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
-        <Chart type="bar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
+        <Chart type="horizontalBar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
+        <span className={s.totalVotes}>Усього голосів: {this.props.data.totalPopular}</span>
         <UserContext.Consumer>
           {user => user ? (
             <div className={s.buttonContainer}>
@@ -146,20 +146,23 @@ voteButton(code, buttonStyle, colorStyle)
           {this.props.data.priorityList.map(priority =>
           <div key={priority.priority._id} className={s.priorityContainer}>
             <Collapsible trigger={(
-            <div className={s.priorityHeader}>
-              <span className={s.priorityTitle}>{priority.priority.Title}:</span>
-              <span className={s.priorityVoteFor}>{priority.voteFor}</span>
-              <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorClose)} />
-            </div>
-            )} triggerWhenOpen={(
-            <div className={s.priorityHeader}>
-              <span className={s.priorityTitle}>{priority.priority.Title}:</span>
-              <span className={s.priorityVoteFor}>{priority.voteFor}</span>
-              <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorOpen)}/>
-            </div>
+             <div className={s.priorityHeader}>
+                <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+                <span className={s.priorityVoteFor}>{priority.voteFor}</span>
+                <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorClose)} />
+              </div>
+             )} triggerWhenOpen={(
+              <div className={s.priorityHeader}>
+                <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+                <span className={s.priorityVoteFor}>{priority.voteFor}</span>
+                <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorOpen)}/>
+              </div>
             )}
              easing="ease">
             <div className={s.priorityArgs}>
+              {priority.arguments.length ? "" : (
+                <span class={s.priorityArgsEmpty} />
+              )}
               {priority.arguments.map(argument =>
                 <div key={argument._id} className={s.argumentContainer}>
                   <div className={s.argumentHeader}>

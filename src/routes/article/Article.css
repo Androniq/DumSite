@@ -7,7 +7,9 @@ li
 {
     margin: 0px auto;
     min-width: 480px;
-    max-width: 980px;    
+    max-width: 980px;
+    display: flex;
+    flex-direction: column;
 }
 
 .header
@@ -17,10 +19,12 @@ li
 
 .tokenHeader
 {
-    padding: 10px;
+    padding: 10px 20px;
     margin: 0px auto;
     min-height: 20px;
     display: flex;
+    border-radius: 20px;
+    width: 100%;
 }
 
 .tokenBase
@@ -43,6 +47,14 @@ li
 {
     font-weight: bold;
     text-align: center;
+}
+
+.totalVotes
+{
+    text-align: right;
+    flex-grow: 1;
+    font-style: italic;
+    color: gray;
 }
 
 .buttonContainer
@@ -292,7 +304,12 @@ li
 
 .priorityArgs
 {
-    display: inline;
+    display: inline;       
+}
+
+.priorityArgsEmpty
+{
+    margin: 0 1px 0 0;
 }
 
 .argumentContainer
