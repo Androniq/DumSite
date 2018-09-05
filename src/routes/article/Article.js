@@ -7,6 +7,7 @@ import Chart from 'react-chartjs-2';
 import { UserContext } from '../../UserContext.js';
 import Popup from "reactjs-popup";
 import Collapsible from 'react-collapsible';
+import PriorityHeader from '../../components/PriorityHeader/PriorityHeader';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -147,27 +148,11 @@ voteButton(code, buttonStyle, colorStyle)
           {this.props.data.priorityList.map(priority =>
           <div key={priority.priority._id} className={s.priorityContainer}>
             <Collapsible trigger={(
-             <div className={s.priorityHeader}>
-                <span className={s.priorityTitle}>{priority.priority.Title}:</span>
-                {priority.priority.popularOverride ? (
-                  <span className={s.priorityPopularOverride}>(популярне голосування)</span>
-                ) : (
-                  <></>
-                )}
-                <span className={s.priorityVoteFor}>{priority.voteFor}</span>
-                <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorClose)} />
-              </div>
+              <PriorityHeader priorityTitle={priority.priority.Title} popularOverride={priority.priority.popularOverride}
+                voteFor={priority.voteFor} isOpen={false} />
              )} triggerWhenOpen={(
-              <div className={s.priorityHeader}>
-                <span className={s.priorityTitle}>{priority.priority.Title}:</span>
-                {priority.priority.popularOverride ? (
-                  <span className={s.priorityPopularOverride}>(популярне голосування)</span>
-                ) : (
-                  <></>
-                )}
-                <span className={s.priorityVoteFor}>{priority.voteFor}</span>
-                <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorOpen)}/>
-              </div>
+              <PriorityHeader priorityTitle={priority.priority.Title} popularOverride={priority.priority.popularOverride}
+                voteFor={priority.voteFor} isOpen={true} />
             )}
              easing="ease">
             <div className={s.priorityArgs}>
