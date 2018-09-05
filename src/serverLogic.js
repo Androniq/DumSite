@@ -149,8 +149,8 @@ export async function getArticleInfo(url, user) {
 		let vote = voteResults[voteIndex].vote;
 		vote.index = voteIndex; // temporarily store index in vote option to navigate arrays easier within this method
 		vote.priorityCount = 0; // how many priorities (categories of arguments) speak in favor of this option
-		vote.ShortDescription = vote.ShortDescription.replace('%A%', article.ShortA).replace('%B%', article.ShortB);
-		vote.ShortestDescription = vote.ShortDescription.replace('%A%', shortLabel(article.ShortA)).replace('%B%', shortLabel(article.ShortB));
+		vote.ShortDescription = vote.ShortDescriptionTemplate.replace('%A%', article.ShortA).replace('%B%', article.ShortB);
+		vote.ShortestDescription = vote.ShortDescriptionTemplate.replace('%A%', shortLabel(article.ShortA)).replace('%B%', shortLabel(article.ShortB));
 		let popularVote = voteResults[voteIndex].popular;
 		totalPopular += popularVote; // add up to total number of popular votes
 		popularCounter.push(popularVote); // push the number into the array

@@ -24,12 +24,12 @@ async function getCollection(db, name) {
   const r = db.collection(name);
   const nameLower = name.toLowerCase();
   if (defaultCollections.includes(nameLower)) {
-    const rCount = await r.count();
-    if (rCount === 0) {
-      {
-        const jsonInitialDataFile = require(`./initialData/${nameLower}.json`);
-        r.insertMany(jsonInitialDataFile);
-      }
+    var rCount = await r.count();
+    if (rCount === 0)
+    {
+      const jsonInitialDataFile = require(`./initialData/${nameLower}.json`);
+      //await r.drop();
+      r.insertMany(jsonInitialDataFile);
     }
   }
   return r;
