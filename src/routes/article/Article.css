@@ -232,3 +232,80 @@
 {
     box-shadow: 0 0 3pt 2pt #4080ff;
 }
+
+.prioritiesContainer
+{
+    display: inline;
+}
+
+.priorityContainer
+{
+    display: inline;
+}
+
+.priorityHeader
+{
+    display: flex;
+    background: blue;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin: 3px;
+}
+
+.priorityTitle
+{
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.priorityVoteFor
+{
+    flex-grow: 1;
+    font-weight: bold;
+    text-align: right;
+}
+
+.priorityArgs
+{
+    display: inline;
+}
+
+.argumentContainer
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.argumentHeader
+{
+    display: flex;
+    background: cyan;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin: 3px;
+}
+
+.argumentTitle
+{
+    flex-grow: 1;
+    text-align: left;
+    font-weight: bold;
+}
+
+.argumentVote
+{
+    flex-grow: 1;
+    text-align: right;
+    font-weight: bold;
+}
+
+.argumentBody
+{
+    border-color: cyan;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 0px 20px;
+    margin: 1px 3px;    
+}

@@ -177,7 +177,7 @@ export async function getArticleInfo(url, user) {
 	for (let priorIndex = 0; priorIndex < priorities.length; priorIndex++)
 	{
 		var priority = priorities[priorIndex];
-		var entry = { "priority" : priority, "arguments" : [] };
+		var entry = { priority : priority, arguments : [] };
 		var voteCounter = []; // argument counter
 		for (let voteIndex = 0; voteIndex < voteResults.length; voteIndex++)
 		{
@@ -212,7 +212,7 @@ export async function getArticleInfo(url, user) {
 			priorityVote = voteResults[maxVotes.firstIndex].vote; // ...then it is our champion, unless...
 		}
 
-		var popularOverride = priority.isPopular && popularVoteResult !== null;
+		var popularOverride = priority.IsPopular && popularVoteResult !== null;
 		priority.popularOverride = popularOverride;
 		if (popularOverride) // ...we're speaking of the 'Popularity' priority...
 		{

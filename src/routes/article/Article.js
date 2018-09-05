@@ -141,6 +141,29 @@ voteButton(code, buttonStyle, colorStyle)
             </div>
           )}
         </UserContext.Consumer>
+        <div className={s.prioritiesContainer}>
+          {this.props.data.priorityList.map(priority =>
+          <div key={priority.priority._id} className={s.priorityContainer}>
+            <div className={s.priorityHeader}>
+              <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+              <span className={s.priorityVoteFor}>{priority.voteFor}</span>
+            </div>
+            <div className={s.priorityArgs}>
+              {priority.arguments.map(argument =>
+                <div key={argument._id} className={s.argumentContainer}>
+                  <div className={s.argumentHeader}>
+                    <span className={s.argumentTitle}>{priority.priority.Title}</span>
+                    <span className={s.argumentVote}>{argument.voteFor}</span>
+                  </div>
+                  <div className={s.argumentBody}>
+                    <span className={s.argumentBodySpan} dangerouslySetInnerHTML={{__html: argument.Content}} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          )}
+        </div>
       </div>
     );
   }
