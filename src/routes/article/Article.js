@@ -161,7 +161,7 @@ voteButton(code, buttonStyle, colorStyle)
              easing="ease">
             <div className={s.priorityArgs}>
               {priority.arguments.length ? "" : (
-                <span class={s.priorityArgsEmpty} />
+                <span className={s.priorityArgsEmpty} />
               )}
               {priority.arguments.map(argument =>
                 <div key={argument._id} className={s.argumentContainer}>
