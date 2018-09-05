@@ -32,9 +32,9 @@ class Navigation extends React.Component {
                 <img src={context.user.profile.photos[0].value} className={s.profilePicture} />
                 <span>{context.user.profile.displayName}</span>
               </Link>
-              <Link className={s.link} to="/logout">
+              <a className={s.link} href="/logout">
                 Вийти
-              </Link>
+              </a>
             </>
           ) : (
             <>

@@ -249,6 +249,14 @@ app.get(
   },
 );
 
+app.get('/logout',
+  (req, res) =>
+  {
+      req.session.passport = null;
+      res.redirect(req.session.returnTo || '/');
+  }  
+)
+
 // API
 
 app.get('/api/whoami', async (req, res) => {
