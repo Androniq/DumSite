@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import Chart from 'react-chartjs-2';
 import { UserContext } from '../../UserContext.js';
 import Popup from "reactjs-popup";
+import Collapsible from 'react-collapsible';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -144,10 +145,20 @@ voteButton(code, buttonStyle, colorStyle)
         <div className={s.prioritiesContainer}>
           {this.props.data.priorityList.map(priority =>
           <div key={priority.priority._id} className={s.priorityContainer}>
+            <Collapsible trigger={(
             <div className={s.priorityHeader}>
               <span className={s.priorityTitle}>{priority.priority.Title}:</span>
               <span className={s.priorityVoteFor}>{priority.voteFor}</span>
+              <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorClose)} />
             </div>
+            )} triggerWhenOpen={(
+            <div className={s.priorityHeader}>
+              <span className={s.priorityTitle}>{priority.priority.Title}:</span>
+              <span className={s.priorityVoteFor}>{priority.voteFor}</span>
+              <img src="/images/expandArrow.png" className={classnames(s.priorityCollapseIndicator, s.priorityCollapseIndicatorOpen)}/>
+            </div>
+            )}
+             easing="ease">
             <div className={s.priorityArgs}>
               {priority.arguments.map(argument =>
                 <div key={argument._id} className={s.argumentContainer}>
@@ -161,6 +172,7 @@ voteButton(code, buttonStyle, colorStyle)
                 </div>
               )}
             </div>
+            </Collapsible>
           </div>
           )}
         </div>

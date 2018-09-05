@@ -105,7 +105,7 @@ export async function getArticleInfo(url, user) {
 	
   loadData.push(
     mongoAsync.dbCollections.arguments
-      .find({ Article: article.ID })
+			.find({ Article: article.ID }, { sort: "Created Date" })			
       .toArray()
       .then(it => (argumentList = it)),
   );
