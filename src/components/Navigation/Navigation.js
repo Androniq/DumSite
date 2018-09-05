@@ -26,11 +26,11 @@ class Navigation extends React.Component {
         </Link>
         <span className={s.spacer}> | </span>
         <UserContext.Consumer>
-          {user => user ? (
+          {context => context.user ? (
             <>
               <Link className={s.link} to="/account">
-                <img src={user.profile.photos[0].value} className={s.profilePicture} />
-                <span>{user.profile.displayName}</span>
+                <img src={context.user.profile.photos[0].value} className={s.profilePicture} />
+                <span>{context.user.profile.displayName}</span>
               </Link>
               <Link className={s.link} to="/logout">
                 Вийти

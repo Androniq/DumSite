@@ -329,7 +329,7 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <UserContext.Provider value={context.user}><App context={context}>{route.component}</App></UserContext.Provider>,
+      <UserContext.Provider value={{ user: context.user }}><App context={context}>{route.component}</App></UserContext.Provider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
 

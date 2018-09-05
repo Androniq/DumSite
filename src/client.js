@@ -92,7 +92,7 @@ async function onLocationChange(location, action) {
     
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
-      <UserContext.Provider value={user}><App context={context}>{route.component}</App></UserContext.Provider>,
+      <UserContext.Provider value={{ user }}><App context={context}>{route.component}</App></UserContext.Provider>,
       container,
       () => {
         if (isInitialRender) {

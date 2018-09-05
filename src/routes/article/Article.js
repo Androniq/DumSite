@@ -122,7 +122,7 @@ voteButton(code, buttonStyle, colorStyle)
         <Chart type="horizontalBar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
         <span className={s.totalVotes}>Усього голосів: {this.props.data.totalPopular}</span>
         <UserContext.Consumer>
-          {user => user ? (
+          {context => context.user ? (
             <div className={s.buttonContainer}>
               <Popup trigger={<button className={s.buttonVote}>Голосувати!</button>} position="top center" modal>
                 <div className={s.pvContainer}>
