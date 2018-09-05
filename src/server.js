@@ -203,7 +203,7 @@ app.get(
     const expiresIn = 60 * 60 * 24 * 180; // 180 days
     const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
     res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-    res.redirect('/');
+    res.redirect(req.session.returnTo || '/');
   },
 );
 
@@ -325,6 +325,11 @@ app.get('*', async (req, res, next) => {
     if (route.redirect) {
       res.redirect(route.status || 302, route.redirect);
       return;
+    }
+
+    if (req.url !== '/json')
+    {
+      req.session.returnTo = req.url;
     }
 
     const data = { ...route };
