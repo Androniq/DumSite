@@ -32,6 +32,10 @@ async function getCollection(db, name) {
       r.insertMany(jsonInitialDataFile);
     }
   }
+  if (name === 'Sessions')
+  {
+    await r.drop();
+  }
   return r;
 }
 
