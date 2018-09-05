@@ -44,3 +44,12 @@
 .spacer {
   color: rgba(128, 128, 128, 1);
 }
+
+.profilePicture
+{
+  object-fit: cover;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin: 0px 10px 0px 0px;
+}

@@ -29,7 +29,8 @@ class Navigation extends React.Component {
           {user => user ? (
             <>
               <Link className={s.link} to="/account">
-                {user.profile.displayName}
+                <img src={user.profile.photos[0].value} className={s.profilePicture} />
+                <span>{user.profile.displayName}</span>
               </Link>
               <Link className={s.link} to="/logout">
                 Вийти
