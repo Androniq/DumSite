@@ -38,6 +38,7 @@ import { serverReady } from './serverLogic/_common';
 import { findOrCreateUser, setUserRole, transferOwnership } from './serverLogic/auth';
 import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
+import { getBlogByUrl } from './serverLogic/blog';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
@@ -274,13 +275,19 @@ app.get('/api/getArticles', async (req, res) => {
 
 app.get('/api/article/:code', async (req, res) => {
   await serverReady();
-  const articleData = await getArticleInfo(req.params.code, await getUser(req));
+  const articleData = await getArticleInfo(req.params.code, getUser(req));
   res.send({ articleData });
 });
 
 app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
   await serverReady();
-  const result = await sendPopularVote(await getUser(req), req.params.articleId, req.params.voteId);
+  const result = await sendPopularVote(getUser(req), req.params.articleId, req.params.voteId);
+  res.send(result);
+});
+
+app.get('/api/getBlog/:blogUrl', async (req, res) => {
+  await serverReady();
+  const result = await getBlogByUrl(req.params.blogUrl);
   res.send(result);
 });
 

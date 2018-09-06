@@ -3,6 +3,12 @@ li
     font-style: normal;
 }
 
+span
+{
+    font-size: 20px;
+    text-align: justify;
+}
+
 .infoArea
 {
     margin: 0px auto;

@@ -1,0 +1,33 @@
+.blogContainer
+{
+    display: flex;
+    flex-direction: column;
+    max-width: 980px;
+    min-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blogHeader
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.blogTitle
+{
+    flex-grow: 1;
+}
+
+.blogTitleH
+{
+    font-weight: bold;
+    text-align: left;
+    font-size: 72px;
+}
+
+span
+{
+    font-size: 20px;
+    text-align: justify;
+}

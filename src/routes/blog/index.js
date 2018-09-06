@@ -1,3 +1,4 @@
+
 /**
  * React Starter Kit (https://www.reactstarterkit.com/)
  *
@@ -9,20 +10,21 @@
 
 import React from 'react';
 import Layout from '../../components/Layout';
-import NotFound from './NotFound';
+import Blog from './Blog';
 
-const title = 'Сторінку не знайдено';
-
-function action() {
+async function action({ fetch }, params) {
+  const blogsResp = await fetch(`/api/getBlog/${params[0]}`, {
+    method: 'GET',
+  });
+  const blog = await blogsResp.json();
   return {
-    chunks: ['not-found'],
-    title,
+    chunks: ['blog'],
+    title: blog && blog.Title,
     component: (
       <Layout>
-        <NotFound title={title} />
+        <Blog data={blog} />
       </Layout>
     ),
-    status: 404,
   };
 }
 
