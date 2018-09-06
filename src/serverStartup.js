@@ -46,6 +46,9 @@ async function getDbCollections() {
   const url = 'mongodb://localhost:27017';
   // Database Name
   const dbName = 'DumGrammarSite';
+
+  mongoAsync.client = mongoClient;
+
   // Connect using MongoClient
   mongoClient.connect(
     url,

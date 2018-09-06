@@ -38,7 +38,9 @@ import {
   getArticleInfo,
   serverReady,
   findOrCreateUser,
-  sendPopularVote
+  sendPopularVote,
+  setUserRole,
+  transferOwnership
 } from './serverLogic.js';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
@@ -284,6 +286,18 @@ app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
   await serverReady();
   const result = await sendPopularVote(await getUser(req), req.params.articleId, req.params.voteId);
   res.send(result);
+});
+
+app.get('/api/setUserRole/:userId/:role', async (req, res) => {
+  await serverReady();
+  const resp = await setUserRole(getUser(req), req.params.userId, req.params.role);
+  res.send(resp);
+});
+
+app.get('/api/transferOwnership/:userId', async (req, res) => {
+  await serverReady();
+  const resp = await transferOwnership(getUser(req), req.params.userId);
+  res.send(resp);
 });
 
 

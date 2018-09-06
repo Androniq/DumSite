@@ -40,7 +40,7 @@ function getMiddleGround(code1, code2) {
     // weird case, but who knows...
     return code1;
   if (code1 > code2) {
-    // alphabetical order
+		// alphabetical order
     const swap = code1;
     code1 = code2;
     code2 = swap;
@@ -126,7 +126,7 @@ export async function findOrCreateUser(token, type, profile)
 				if (profile.name.familyName)
 					newUser.displayName += profile.name.familyName;
 			}
-			user = await mongoAsync.dbCollections.users.insert(newUser);
+			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
 			break;
 		case "facebook":
 			newUser = { facebookId : token, facebookProfile : profile, role: "member", confirmed: true, blocked: false };
@@ -156,7 +156,7 @@ export async function findOrCreateUser(token, type, profile)
 				if (profile.name.familyName)
 					newUser.displayName += profile.name.familyName;
 			}
-			user = await mongoAsync.dbCollections.users.insert(newUser);
+			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
 			break;
 		case "local":
 			// TODO: read fields from profile
@@ -190,6 +190,25 @@ function getLevel(user)
 function checkPrivilege(user, level)
 {
 	return getLevel(user) + 0.1 /* sorry, I'm C# paranoid - scary number comparison */ >= level;
+}
+
+// Database operations
+
+async function mongoInsert(collection, item, user)
+{
+	var now = new Date();
+	item.DateCreated = now;
+	item.DateUpdated = now;
+	if (user)
+		item.Owner = user._id;
+	return await collection.insert(item);
+}
+
+async function mongoUpdate(collection, item)
+{
+	var now = new Date();
+	item.DateUpdated = now;
+	return await collection.update({ _id: item._id }, item);
 }
 
 // API
@@ -456,12 +475,77 @@ export async function sendPopularVote(user, articleId, voteId)
 		additionalMessage = 'vote updated';
 		var vote = res[0];
 		vote.Vote = voteId;
-		await mongoAsync.dbCollections.popularVote.update({ _id: vote._id }, vote);
+		await mongoUpdate(mongoAsync.dbCollections.popularVote, vote);
 	}
 	else // there are no votes: create a new one
 	{
 		var newVote = { User: user._id, Vote: voteId, Article: articleId, Active: true };
-		await mongoAsync.dbCollections.popularVote.insert(newVote);
+		await mongoInsert(mongoAsync.dbCollections.popularVote, newVote);
 	}
 	return { success: true, message: 'Success (' + additionalMessage + ')' };
+}
+
+export async function setUserRole(operatorUser, operandUserId, newRole)
+{
+	if (!checkPrivilege(operatorUser, USER_LEVEL_ADMIN))
+	{
+		return { success: false, message: 'Insufficient privileges' };
+	}
+	var operandUser = await mongoAsync.users.findOne({ _id: operandUserId });
+	if (!operandUser)
+	{
+		return { success: false, message: 'User not found' };
+	}
+	if (operandUser.role === 'owner')
+	{
+		return { success: false, message: 'You cannot change the OWNER role (use transferOwnership instead)' };
+	}
+	switch (newRole)
+	{
+		case 'member':
+		case USER_LEVEL_MEMBER:
+			operandUser.role = 'member';
+			break;
+		case 'moderator':
+		case USER_LEVEL_MODERATOR:
+			operandUser.role = 'moderator';
+			break;
+		case 'admin':
+		case USER_LEVEL_ADMIN:
+			operandUser.role = 'admin';
+			break;
+		default:
+			return { success: false, message: 'Unknown newRole: ' + newRole };
+	}
+	await mongoUpdate(mongoAsync.dbCollections.users, operandUser);
+	return { success: true };
+}
+
+export async function transferOwnership(fromUser, toUserId)
+{
+	if (!checkPrivilege(fromUser, USER_LEVEL_OWNER))
+	{
+		return { success: false, message: 'Only site owner can transfer ownership' };
+	}
+	var toUser = await mongoAsync.users.findOne({ _id: toUserId });
+	if (!toUser)
+	{
+		return { success: false, message: 'User not found' };
+	}
+	if (!toUser.confirmed)
+	{
+		return { success: false, message: 'Target user did not confirm email address' };
+	}
+	toUser.blocked = false;
+	toUser.role = 'owner';
+	fromUser.role = 'admin';
+	
+	var session = mongoAsync.client.startSession();
+	session.startTransaction();
+	await mongoUpdate(mongoAsync.dbCollections.users, fromUser);
+	await mongoUpdate(mongoAsync.dbCollections.users, toUser);
+	await session.commitTransaction();
+	session.endSession();
+	
+	return { success: true };
 }
