@@ -18,11 +18,20 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className={s.root} role="navigation">
-        <Link className={s.link} to="/about">
-          Про сайт
+        <Link className={s.link} to="/">
+          Домівка
         </Link>
-        <Link className={s.link} to="/contact">
-          Контакти
+        <Link className={s.link} to="/blog/whatisdum">
+          Що таке ДУМ
+        </Link>
+        <Link className={s.link} to="/blog/principles">
+          Принципи
+        </Link>
+        <Link className={s.link} to="/blog/zunpa">
+          ЗУНПА
+        </Link>
+        <Link className={s.link} to="/blog/awayfromrussia">
+          Знеросійщення
         </Link>
         <span className={s.spacer}> | </span>
         <UserContext.Consumer>

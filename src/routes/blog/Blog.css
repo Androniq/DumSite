@@ -17,17 +17,63 @@
 .blogTitle
 {
     flex-grow: 1;
+    display: flex;
+    flex-direction: row;
 }
 
 .blogTitleH
 {
     font-weight: bold;
     text-align: left;
-    font-size: 72px;
+    flex-grow: 1;
+    font-size: 60px;
+    margin: 0;
+}
+
+.authorArea
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-end;
+}
+
+.userCardContainer
+{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;      
+}
+
+.userCardAvatar
+{
+    object-fit: cover;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    
+}
+
+.userCardName
+{
+    margin: 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: right;
+}
+
+.authorAreaDate
+{
+    font-style: italic;    
 }
 
 span
 {
     font-size: 20px;
     text-align: justify;
+}
+
+p
+{
+    text-indent: 50px;
 }

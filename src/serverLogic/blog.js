@@ -17,5 +17,14 @@ import {
 
     export async function getBlogByUrl(url)
     {
-        return await mongoAsync.dbCollections.blog.findOne({ Url: url });
+        var blog = await mongoAsync.dbCollections.blog.findOne({ Url: url });
+        if (!blog)
+            return null;
+        var owner = await mongoAsync.dbCollections.users.findOne({ _id: blog.Owner });
+        if (!owner)
+        {
+            owner = await mongoAsync.dbCollections.users.findOne();
+        }
+        blog.Owner = owner;
+        return blog;
     }

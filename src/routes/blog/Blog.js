@@ -15,6 +15,13 @@ class Blog extends React.Component {
               <div className={s.blogHeader}>
                 <div className={s.blogTitle}>
                     <h2 className={s.blogTitleH}>{this.props.data.Title}</h2>
+                    <div className={s.authorArea}>
+                        <div className={s.userCardContainer}>
+                            <span className={s.userCardName}>{this.props.data.Owner.displayName}</span>
+                            <img className={s.userCardAvatar} src={this.props.data.Owner.photo} />
+                        </div>
+                        <span className={s.authorAreaDate}>{new Date(this.props.data.DateCreated).toLocaleDateString()}</span>
+                    </div>
                 </div>
               </div>
               <span dangerouslySetInnerHTML={{__html: this.props.data.Content}} />
