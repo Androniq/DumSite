@@ -43,6 +43,7 @@ import {
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
+import { rethrow } from 'rsvp';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -95,6 +96,10 @@ function getProfile(req) // this is Mongo-specific user getter (common one is si
   if (req && req.session && req.session.passport)
   {
     return req.session.passport.user;
+  }
+  if (req && req.user)
+  {
+    return req.user;
   }
   return null;
 }
@@ -187,7 +192,7 @@ passport.use(
 app.get(
   '/login/google',
   passport.authenticate('google', {
-    scope: ['https://www.googleapis.com/auth/plus.me'],
+    scope: ['https://www.googleapis.com/auth/plus.me', 'https://www.googleapis.com/auth/userinfo.email'],
     session: true,
     authInfo: true,
   }),

@@ -37,8 +37,8 @@ class ErrorPage extends React.Component {
 
     return (
       <div>
-        <h1>Error</h1>
-        <p>Sorry, a critical error occurred on this page.</p>
+        <h1>Помилка</h1>
+        <p>Так скидаєсі, жи ви є в Закарпаттьови. Ту шо інтернету, шо української мови не є.</p>
       </div>
     );
   }

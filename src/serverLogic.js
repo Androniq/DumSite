@@ -70,7 +70,7 @@ function getMiddleGround(code1, code2) {
 }
 
 function shortLabel(str) {
-  const maxlen = 10;
+  const maxlen = 12;
   if (str.length <= maxlen) return str;
   return `${str.substr(0, maxlen - 2)}...`;
 }
@@ -79,9 +79,89 @@ function shortLabel(str) {
 
 export async function findOrCreateUser(token, type, profile)
 {
-  var user = await mongoAsync.dbCollections.users.findOne({ "googleId" : token });
-  if (user) { return user; }
-  user = await mongoAsync.dbCollections.users.insert({ "googleId" : token, "profile" : profile });
+	var user;
+	switch(type)
+	{
+		case "google":
+			user = await mongoAsync.dbCollections.users.findOne({ "googleId" : token });
+			break;
+		case "facebook":
+			user = await mongoAsync.dbCollections.users.findOne({ "facebookId" : token });
+			break;
+		case "local":
+			user = await mongoAsync.dbCollections.users.findOne({ "email" : token });
+			break;
+		default:
+			throw "Wrong user auth type: " + type + " (should be google, facebook or local)";
+	}
+	if (user) { return user; }
+	let newUser;
+	switch(type)
+	{
+		case "google":
+			newUser = { googleId : token, googleProfile : profile, role: "member", confirmed: true, blocked: false };
+			if (profile.emails)
+			{
+				profile.emails.forEach(email =>
+				{
+					if (email.type === 'account')
+						newUser.email = email.value;
+				});
+			}
+			if (profile.photos)
+			{
+				newUser.photo = profile.photos[0].value;
+			}
+			if (profile.displayName)
+			{
+				newUser.displayName = profile.displayName;
+			}
+			else if (profile.name)
+			{
+				newUser.displayName = "";
+				if (profile.name.givenName)
+					newUser.displayName += profile.name.givenName;
+				if (profile.name.givenName && profile.name.familyName)
+					newUser.displayName += " ";
+				if (profile.name.familyName)
+					newUser.displayName += profile.name.familyName;
+			}
+			user = await mongoAsync.dbCollections.users.insert(newUser);
+			break;
+		case "facebook":
+			newUser = { facebookId : token, facebookProfile : profile, role: "member", confirmed: true, blocked: false };
+			if (profile.emails)
+			{
+				profile.emails.forEach(email =>
+				{
+					if (email.type === 'account')
+						newUser.email = email.value;
+				});
+			}
+			if (profile.photos)
+			{
+				newUser.photo = profile.photos[0].value;
+			}
+			if (profile.displayName)
+			{
+				newUser.displayName = profile.displayName;
+			}
+			else if (profile.name)
+			{
+				newUser.displayName = "";
+				if (profile.name.givenName)
+					newUser.displayName += profile.name.givenName;
+				if (profile.name.givenName && profile.name.familyName)
+					newUser.displayName += " ";
+				if (profile.name.familyName)
+					newUser.displayName += profile.name.familyName;
+			}
+			user = await mongoAsync.dbCollections.users.insert(newUser);
+			break;
+		case "local":
+			// TODO: read fields from profile
+			break;
+	}
   return user;
 }
 

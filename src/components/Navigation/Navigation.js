@@ -29,8 +29,8 @@ class Navigation extends React.Component {
           {context => context.user ? (
             <>
               <Link className={s.link} to="/account">
-                <img src={context.user.profile.photos[0].value} className={s.profilePicture} />
-                <span>{context.user.profile.displayName}</span>
+                <img src={context.user.photo} className={s.profilePicture} />
+                <span>{context.user.displayName}</span>
               </Link>
               <a className={s.link} href="/logout">
                 Вийти
