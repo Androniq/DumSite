@@ -18,6 +18,7 @@ const defaultCollections = [
   'colors',
   'priorities',
   'votes',
+  'blog'
 ];
 
 async function getCollection(db, name) {
@@ -58,6 +59,7 @@ async function getDbCollections() {
       const dbColors = await getCollection(db, 'Colors');
       const dbPopularVote = await getCollection(db, 'PopularVote');
       const dbUsers = await getCollection(db, 'Users');
+      const dbBlog = await getCollection(db, 'Blog');
 
       mongoAsync.dbCollections = {
         articles: dbArticles,
@@ -66,7 +68,8 @@ async function getDbCollections() {
         arguments: dbArguments,
         colors: dbColors,
         popularVote: dbPopularVote,
-        users: dbUsers
+        users: dbUsers,
+        blog: dbBlog
       };
 
       const votesPreload = await dbVotes.find().toArray();
