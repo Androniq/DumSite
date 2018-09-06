@@ -124,7 +124,7 @@ voteButton(code, buttonStyle, colorStyle)
         <Chart type="horizontalBar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
         <span className={s.totalVotes}>Усього голосів: {this.props.data.totalPopular}</span>
         <UserContext.Consumer>
-          {context => context.user ? (
+          {context => context.user ? context.user.confirmed ? !context.user.blocked ? (
             <div className={s.buttonContainer}>
               <Popup trigger={<button className={s.buttonVote}>Голосувати!</button>} position="top center" modal>
                 <div className={s.pvContainer}>
@@ -137,6 +137,14 @@ voteButton(code, buttonStyle, colorStyle)
                 </div>
               </Popup>              
               <button className={s.buttonVote}>Аргументувати...</button>
+            </div>
+          ) : (
+            <div className={s.containerNotAuthorized}>
+              <span className={s.textNotAuthorized}>Ви не маєте права голосувати</span>
+            </div>
+          ) : (
+            <div className={s.containerNotAuthorized}>
+              <span className={s.textNotAuthorized}>Щоб голосувати, потрібно підтвердити свою адресу електронної пошти</span>
             </div>
           ) : (
             <div className={s.containerNotAuthorized}>

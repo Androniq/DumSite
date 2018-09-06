@@ -20,7 +20,7 @@ class Blog extends React.Component {
                             <span className={s.userCardName}>{this.props.data.Owner.displayName}</span>
                             <img className={s.userCardAvatar} src={this.props.data.Owner.photo} />
                         </div>
-                        <span className={s.authorAreaDate}>{new Date(this.props.data.DateCreated).toLocaleDateString()}</span>
+                        <span className={s.authorAreaDate}>{new Date(this.props.data.DateCreated).toLocaleDateString('uk-UA')}</span>
                     </div>
                 </div>
               </div>

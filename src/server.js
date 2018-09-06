@@ -91,23 +91,17 @@ var store = new MongoDBStore({
   }  
 });
 
-function getProfile(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
+function getUser(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
 {
-  if (req && req.session && req.session.passport)
-  {
-    return req.session.passport.user;
-  }
   if (req && req.user)
   {
     return req.user;
   }
+  if (req && req.session && req.session.passport)
+  {
+    return req.session.passport.user;
+  }
   return null;
-}
-
-function getUser(req)
-{
-  //return await profileToUser(getProfile(req));
-  return getProfile(req);
 }
 
 store.on('connected', function() {
