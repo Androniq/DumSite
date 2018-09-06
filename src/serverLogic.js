@@ -165,13 +165,42 @@ export async function findOrCreateUser(token, type, profile)
   return user;
 }
 
+const USER_LEVEL_VISITOR = 1;
+const USER_LEVEL_MEMBER = 2;
+const USER_LEVEL_MODERATOR = 3;
+const USER_LEVEL_ADMIN = 4;
+const USER_LEVEL_OWNER = 5;
+
+function getLevel(user)
+{
+	if (!user)
+		return USER_LEVEL_VISITOR; // not logged in - visitor
+	if (user.blocked || !user.confirmed)
+		return USER_LEVEL_VISITOR; // email unconfirmed or user banned
+	switch (user.role)
+	{
+		case 'member': return USER_LEVEL_MEMBER;
+		case 'moderator': return USER_LEVEL_MODERATOR;
+		case 'admin': return USER_LEVEL_ADMIN;
+		case 'owner': return USER_LEVEL_OWNER;
+	}
+	return USER_LEVEL_VISITOR;
+}
+
+function checkPrivilege(user, level)
+{
+	return getLevel(user) + 0.1 /* sorry, I'm C# paranoid - scary number comparison */ >= level;
+}
+
 // API
 
-export async function getArticles(user) {
+export async function getArticles(user)
+{
   return await mongoAsync.dbCollections.articles.find().toArray();
 }
 
-export async function getArticleInfo(url, user) {
+export async function getArticleInfo(url, user)
+{
   const article = await mongoAsync.dbCollections.articles.findOne({ Url: url });
   const loadData = [];
   const voteResults = [];
@@ -194,7 +223,7 @@ export async function getArticleInfo(url, user) {
     voteResults.push(voteItem);
     loadData.push(
       mongoAsync.dbCollections.popularVote
-        .countDocuments({ Article: article.ID, Vote: element.ID })
+        .countDocuments({ Article: article.ID, Vote: element.ID, Active: true })
         .then(it => voteItem.popular = it),
     );
 	});
@@ -397,7 +426,14 @@ async function deleteAllVotes(userId, articleId)
 export async function sendPopularVote(user, articleId, voteId)
 {
 	if (!user)
+	{
 		return { success: false, message: 'Error: not logged in' };
+	}
+
+	if (!checkPrivilege(user, USER_LEVEL_MEMBER))
+	{
+		return { success: false, message: 'Error: not enough privileges (either email not confirmed or user banned)' };
+	}
 
 	var res = await mongoAsync.dbCollections.popularVote.find({ Article: articleId, User: user._id }).toArray();
 
@@ -408,7 +444,7 @@ export async function sendPopularVote(user, articleId, voteId)
 	}
 
 	var additionalMessage = 'vote added';
-	var totalCount = res.length;	
+	var totalCount = res.length;
 	if (totalCount > 1) // unexpected situation: more than single vote from current user on this article!
 	{
 		additionalMessage = 'suspicious: multiple votes detected and removed';
@@ -424,7 +460,7 @@ export async function sendPopularVote(user, articleId, voteId)
 	}
 	else // there are no votes: create a new one
 	{
-		var newVote = { User: user._id, Vote: voteId, Article: articleId };
+		var newVote = { User: user._id, Vote: voteId, Article: articleId, Active: true };
 		await mongoAsync.dbCollections.popularVote.insert(newVote);
 	}
 	return { success: true, message: 'Success (' + additionalMessage + ')' };
