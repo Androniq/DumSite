@@ -39,6 +39,7 @@ import { findOrCreateUser, setUserRole, transferOwnership } from './serverLogic/
 import getArticle from './serverLogic/getArticle';
 import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
+import setArticle from './serverLogic/setArticle';
 import { getBlogByUrl } from './serverLogic/blog';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
@@ -278,6 +279,12 @@ app.get('/api/getArticle/:code', async (req, res) => {
   await serverReady();
   const article = await getArticle(req.params.code, getUser(req));
   res.send(article);
+});
+
+app.post('/api/setArticle', async (req, res) => {
+  await serverReady();
+  var resp = await setArticle(getUser(req), req.body);
+  res.send(resp);
 });
 
 app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {

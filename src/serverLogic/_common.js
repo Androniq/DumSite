@@ -5,6 +5,8 @@ export async function serverReady() {
   await mongoAsync.serverReadyPromise;
 }
 
+const ObjectID = require('mongodb').ObjectID;
+
 // local utilities
 
 export function max(array) {
@@ -91,8 +93,10 @@ export async function mongoInsert(collection, item, user)
 export async function mongoUpdate(collection, item)
 {
 	var now = new Date();
-	item.DateUpdated = now;
-	return await collection.update({ _id: item._id }, item);
+  item.DateUpdated = now;
+  var id = new ObjectID(item._id);
+  delete item._id;
+	return await collection.updateOne({ _id: id }, { $set: item });
 }
 
 // User privileges
