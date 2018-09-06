@@ -36,6 +36,7 @@ import session from 'express-session';
 import sendPopularVote from './serverLogic/sendPopularVote';
 import { serverReady } from './serverLogic/_common';
 import { findOrCreateUser, setUserRole, transferOwnership } from './serverLogic/auth';
+import getArticle from './serverLogic/getArticle';
 import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
 import { getBlogByUrl } from './serverLogic/blog';
@@ -279,6 +280,12 @@ app.get('/api/article/:code', async (req, res) => {
   res.send({ articleData });
 });
 
+app.get('/api/getArticle/:code', async (req, res) => {
+  await serverReady();
+  const article = await getArticle(req.params.code, getUser(req));
+  res.send(article);
+});
+
 app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
   await serverReady();
   const result = await sendPopularVote(getUser(req), req.params.articleId, req.params.voteId);
@@ -387,6 +394,10 @@ app.get('*', async (req, res, next) => {
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
+    if (req.url !== '/json')
+    {
+      req.session.returnTo = req.url;
+    }
     res.send(`<!doctype html>${html}`);
   } catch (err) {
     next(err);

@@ -50,6 +50,11 @@ const routes = {
       load: () => import(/* webpackChunkName: 'article' */ './article'),
     },
     {
+      name: "EditArticle",
+      path: '/editArticle/(.*)',
+      load: () => import(/* webpackChunkName: 'editArticle' */ './editArticle'),
+    },
+    {
       name: "Blog",
       path: '/blog/(.*)',
       load: () => import(/* webpackChunkName: 'blog' */ './blog'),
