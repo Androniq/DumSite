@@ -2,7 +2,7 @@ export const mongoClient = require('mongodb').MongoClient;
 
 export var mongoAsyncInternal = {};
 
-export var mongoAsync = {
+export const mongoAsync = {
   ready: false,
   serverReadyPromise: new Promise((resolve, reject) => {
     mongoAsyncInternal.serverReadyTrigger = resolve;

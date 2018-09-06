@@ -33,15 +33,11 @@ import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unr
 import config from './config';
 import session from 'express-session';
 //import MongoDBStore from 'connect-mongodb-session';
-import {
-  getArticles,
-  getArticleInfo,
-  serverReady,
-  findOrCreateUser,
-  sendPopularVote,
-  setUserRole,
-  transferOwnership
-} from './serverLogic.js';
+import sendPopularVote from './serverLogic/sendPopularVote';
+import { serverReady } from './serverLogic/_common';
+import { findOrCreateUser, setUserRole, transferOwnership } from './serverLogic/auth';
+import getArticleInfo from './serverLogic/getArticleInfo';
+import getArticles from './serverLogic/getArticles';
 import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
