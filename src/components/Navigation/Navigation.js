@@ -13,6 +13,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Navigation.css';
 import Link from '../Link';
 import { UserContext } from '../../UserContext.js';
+import { checkPrivilege, USER_LEVEL_MODERATOR } from '../../utility';
 
 class Navigation extends React.Component {
   render() {
@@ -30,13 +31,15 @@ class Navigation extends React.Component {
         <Link className={s.link} to="/blog/zunpa">
           ЗУНПА
         </Link>
-        <Link className={s.link} to="/blog/awayfromrussia">
-          Знеросійщення
-        </Link>
-        <span className={s.spacer}> | </span>
         <UserContext.Consumer>
           {context => context.user ? (
             <>
+            {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
+              <Link className={s.link} to="/editArticle/new">
+                Написати статтю
+              </Link>
+            ) : ""}
+              <span className={s.spacer}> | </span>
               <Link className={s.link} to="/account">
                 <img src={context.user.photo} className={s.profilePicture} />
                 <span>{context.user.displayName}</span>
@@ -47,6 +50,7 @@ class Navigation extends React.Component {
             </>
           ) : (
             <>
+              <span className={s.spacer}> | </span>
               <Link className={s.link} to="/login">
                 Увійти
               </Link>

@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
+import { guid } from '../../utility';
 
 class EditArticle extends React.Component {
   static propTypes = {};
@@ -27,7 +28,7 @@ updatePageTitle(value) { this.setState({PageTitle:value}); }
 updateKeywords(value) { this.setState({Keywords:value}); }
 updateUrl(value) { this.setState({Url:value}); } // somewhere here I regretted I didn't choose Angular
 updateTokenA(value) { this.setState({TokenA:value}); }
-updateTokenB(value) { this.setState({TokenA:value}); }
+updateTokenB(value) { this.setState({TokenB:value}); }
 updateShortA(value) { this.setState({ShortA:value}); }
 updateShortB(value) { this.setState({ShortB:value}); }
 
