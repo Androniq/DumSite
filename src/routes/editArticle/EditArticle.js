@@ -5,7 +5,7 @@ import s from './EditArticle.css';
 import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
-//import { browserHistory } from 'react-router';
+import history from '../../history';
 
 class EditArticle extends React.Component {
   static propTypes = {};
@@ -57,7 +57,7 @@ async onSave()
     var resj = await res.json();
   if (resj.success)
   {
-    //browserHistory.push('article/' + article.Url);
+    history.push('/article/' + article.Url);
   }
   else
   {
