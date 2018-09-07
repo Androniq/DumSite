@@ -8,6 +8,15 @@ import { UserContext } from '../../UserContext.js';
 import Popup from "reactjs-popup";
 import Collapsible from 'react-collapsible';
 import PriorityHeader from '../../components/PriorityHeader/PriorityHeader';
+import {
+	getLevel,
+	checkPrivilege,
+	USER_LEVEL_VISITOR,
+	USER_LEVEL_MEMBER,
+	USER_LEVEL_MODERATOR,
+	USER_LEVEL_ADMIN,
+  USER_LEVEL_OWNER } from '../../utility';
+import history from '../../history';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -111,6 +120,11 @@ voteButton(code, buttonStyle, colorStyle)
   );
 }
 
+clickEdit()
+{
+  history.push('/editArticle/' + this.props.data.article.Url);
+}
+
   render() {
     return (
       <div className={s.infoArea}>
@@ -137,6 +151,9 @@ voteButton(code, buttonStyle, colorStyle)
                 </div>
               </Popup>              
               <button className={s.buttonVote}>Аргументувати...</button>
+              {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
+              <button className={s.buttonVote} onClick={this.clickEdit.bind(this)} href="">Редагувати</button>
+              ):""}
             </div>
           ) : (
             <div className={s.containerNotAuthorized}>

@@ -65,6 +65,11 @@ async onSave()
   }
 }
 
+onCancel()
+{
+  history.push('/article/' + this.props.data.Url);
+}
+
   render()
   {
       return (
@@ -98,6 +103,7 @@ async onSave()
             <div className={s.contentEditor}></div>
             <div className={s.buttonsContainer}>
               <button className={s.buttonSave} onClick={this.onSave.bind(this)}>Зберегти</button>
+              <button className={s.buttonSave} onClick={this.onCancel.bind(this)}>Повернутися</button>
             </div>
           </div>
       );
