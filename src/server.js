@@ -45,6 +45,8 @@ import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
 import { rethrow } from 'rsvp';
+import getArgument from './serverLogic/getArgument';
+import setArgument from './serverLogic/setArgument';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -284,6 +286,18 @@ app.get('/api/getArticle/:code', async (req, res) => {
 app.post('/api/setArticle', async (req, res) => {
   await serverReady();
   var resp = await setArticle(getUser(req), req.body);
+  res.send(resp);
+});
+
+app.get('/api/getArgument/:id', async (req, res) => {
+  await serverReady();
+  const argument = await getArgument(req.params.id);
+  res.send(argument);
+});
+
+app.post('/api/setArgument', async (req, res) => {
+  await serverReady();
+  var resp = await setArgument(getUser(req), req.body);
   res.send(resp);
 });
 
