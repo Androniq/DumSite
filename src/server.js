@@ -32,14 +32,10 @@ import schema from './data/schema';
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import session from 'express-session';
-// import MongoDBStore from 'connect-mongodb-session';
+//import MongoDBStore from 'connect-mongodb-session';
 import sendPopularVote from './serverLogic/sendPopularVote';
 import { serverReady } from './serverLogic/_common';
-import {
-  findOrCreateUser,
-  setUserRole,
-  transferOwnership,
-} from './serverLogic/auth';
+import { findOrCreateUser, setUserRole, transferOwnership } from './serverLogic/auth';
 import getArticle from './serverLogic/getArticle';
 import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
@@ -85,39 +81,38 @@ app.use(passport.session());
 
 // MongoDBStore
 
-const MongoDBStore = require('connect-mongodb-session')(session);
-
-const store = new MongoDBStore(
+var MongoDBStore = require('connect-mongodb-session')(session);
+var store = new MongoDBStore({
+  uri: 'mongodb://localhost:27017',
+  databaseName: 'DumGrammarSite',
+  collection: 'Sessions'
+}, function(error)
+{
+  if (error)
   {
-    uri: 'mongodb://localhost:27017',
-    databaseName: 'DumGrammarSite',
-    collection: 'Sessions',
-  },
-  error => {
-    if (error) {
-      console.error(error);
-    }
-  },
-);
+    console.error(error);
+  }  
+});
 
-function getUser(
-  req, // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
-) {
-  if (req && req.user) {
+function getUser(req) // this is Mongo-specific user getter (common one is simply req.user), so it is in MongoDBStore section
+{
+  if (req && req.user)
+  {
     return req.user;
   }
-  if (req && req.session && req.session.passport) {
+  if (req && req.session && req.session.passport)
+  {
     return req.session.passport.user;
   }
   return null;
 }
 
-store.on('connected', () => {
+store.on('connected', function() {
   store.client; // The underlying MongoClient object from the MongoDB driver
 });
-
+ 
 // Catch errors
-store.on('error', error => {
+store.on('error', function(error) {
   assert.ifError(error);
   assert.ok(false);
 });
@@ -128,7 +123,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
-    store,
+    store: store
   }),
 );
 
@@ -194,10 +189,7 @@ passport.use(
 app.get(
   '/login/google',
   passport.authenticate('google', {
-    scope: [
-      'https://www.googleapis.com/auth/plus.me',
-      'https://www.googleapis.com/auth/userinfo.email',
-    ],
+    scope: ['https://www.googleapis.com/auth/plus.me', 'https://www.googleapis.com/auth/userinfo.email'],
     session: true,
     authInfo: true,
   }),
@@ -223,7 +215,7 @@ passport.use(
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
       callbackURL: 'http://mydomain.example.com:3000/auth/facebook/callback',
-      passReqToCallback: false,
+      passReqToCallback: false
     },
     (accessToken, refreshToken, profile, done) => {
       if (!profile) {
@@ -233,8 +225,7 @@ passport.use(
       }
       findOrCreateUser(profile.id, 'facebook', profile).then(
         user => done(null, user),
-        err => done(err, null),
-      );
+        err => done(err, null));
     },
   ),
 );
@@ -260,10 +251,13 @@ app.get(
   },
 );
 
-app.get('/logout', (req, res) => {
-  req.session.passport = null;
-  res.redirect(req.session.returnTo || '/');
-});
+app.get('/logout',
+  (req, res) =>
+  {
+      req.session.passport = null;
+      res.redirect(req.session.returnTo || '/');
+  }  
+)
 
 // API
 
@@ -291,7 +285,7 @@ app.get('/api/getArticle/:code', async (req, res) => {
 
 app.post('/api/setArticle', async (req, res) => {
   await serverReady();
-  const resp = await setArticle(getUser(req), req.body);
+  var resp = await setArticle(getUser(req), req.body);
   res.send(resp);
 });
 
@@ -309,17 +303,13 @@ app.get('/api/getArgument/:id', async (req, res) => {
 
 app.post('/api/setArgument', async (req, res) => {
   await serverReady();
-  const resp = await setArgument(getUser(req), req.body);
+  var resp = await setArgument(getUser(req), req.body);
   res.send(resp);
 });
 
 app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
   await serverReady();
-  const result = await sendPopularVote(
-    getUser(req),
-    req.params.articleId,
-    req.params.voteId,
-  );
+  const result = await sendPopularVote(getUser(req), req.params.articleId, req.params.voteId);
   res.send(result);
 });
 
@@ -331,11 +321,7 @@ app.get('/api/getBlog/:blogUrl', async (req, res) => {
 
 app.get('/api/setUserRole/:userId/:role', async (req, res) => {
   await serverReady();
-  const resp = await setUserRole(
-    getUser(req),
-    req.params.userId,
-    req.params.role,
-  );
+  const resp = await setUserRole(getUser(req), req.params.userId, req.params.role);
   res.send(resp);
 });
 
@@ -344,6 +330,7 @@ app.get('/api/transferOwnership/:userId', async (req, res) => {
   const resp = await transferOwnership(getUser(req), req.params.userId);
   res.send(resp);
 });
+
 
 //
 // Register API middleware
@@ -390,7 +377,7 @@ app.get('*', async (req, res, next) => {
       pathname: req.path,
       query: req.query,
     };
-
+    
     const route = await router.resolve(context);
 
     if (route.redirect) {
@@ -398,15 +385,14 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-    if (req.url !== '/json') {
+    if (req.url !== '/json')
+    {
       req.session.returnTo = req.url;
     }
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <UserContext.Provider value={{ user: context.user }}>
-        <App context={context}>{route.component}</App>
-      </UserContext.Provider>,
+      <UserContext.Provider value={{ user: context.user }}><App context={context}>{route.component}</App></UserContext.Provider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
 
@@ -429,7 +415,8 @@ app.get('*', async (req, res, next) => {
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
-    if (req.url !== '/json') {
+    if (req.url !== '/json')
+    {
       req.session.returnTo = req.url;
     }
     res.send(`<!doctype html>${html}`);
