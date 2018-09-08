@@ -5,7 +5,10 @@ import s from './TextInput.css';
 
 const ENTER_KEY_CODE = 13;
 
+var allInstances = []; // prevent annoying opening of multiple tooltips simultaneously
+
 class TextInput extends React.Component {
+
   constructor(props) {
     super(props);
     this.placeholder = props.placeholder;
@@ -13,9 +16,13 @@ class TextInput extends React.Component {
     this.state = {
       value: props.value || ''
     };
+    allInstances.push(this);
   }
+  
 
-  static propTypes = {};
+static propTypes = {};
+
+state={popupOpen:false};
 
  async _onChange(event) {
     await this.setState({
@@ -34,9 +41,25 @@ class TextInput extends React.Component {
     }
   }
 
+  async onOpen()
+  {
+    this.setState({popupOpen:true});
+    allInstances.forEach(item =>
+      {
+        if (item !== this && item.state.popupOpen)
+          item.close();
+      });
+  }
+
+  close()
+  {
+    this.setState({popupOpen:false});
+  }
+
   render() {
     return (
-        <Popup on='hover' contentStyle={{"width":"400px","borderRadius":"5px","textAlign":"justify"}} trigger={(
+        <Popup on='hover' open={this.state.popupOpen} onOpen={this.onOpen.bind(this)} contentStyle={{"width":"400px","borderRadius":"5px","textAlign":"justify"}}
+          trigger={(
             <input
                 className={this.props.className}
                 type="text"
