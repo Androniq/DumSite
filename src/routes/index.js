@@ -45,27 +45,29 @@ const routes = {
     },
 
     {
-      name: "Article",
+      name: 'Article',
       path: '/article/(.*)',
       load: () => import(/* webpackChunkName: 'article' */ './article'),
     },
     {
-      name: "EditArticle",
+      name: 'EditArticle',
       path: '/editArticle/(.*)',
       load: () => import(/* webpackChunkName: 'editArticle' */ './editArticle'),
     },
     {
-      name: "EditArgument",
+      name: 'EditArgument',
       path: '/editArgument/(.*)/(.*)',
-      load: () => import(/* webpackChunkName: 'editArgument' */ './editArgument'),
+      load: () =>
+        import(/* webpackChunkName: 'editArgument' */ './editArgument'),
     },
     {
-      name: "EditArgument",
+      name: 'EditArgument',
       path: '/editArgument/(.*)',
-      load: () => import(/* webpackChunkName: 'editArgument' */ './editArgument'),
+      load: () =>
+        import(/* webpackChunkName: 'editArgument' */ './editArgument'),
     },
     {
-      name: "Blog",
+      name: 'Blog',
       path: '/blog/(.*)',
       load: () => import(/* webpackChunkName: 'blog' */ './blog'),
     },
