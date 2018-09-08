@@ -18,7 +18,7 @@
     border-radius: 10px;
     border-color: darkgoldenrod;
     height: 28px;
-    min-width: 460px;
+    width: 460px;
 }
 
 .textInput:focus
@@ -101,4 +101,42 @@
     border: red;
     border-width: 2px;
     border-style: solid;
+}
+
+.urlValidator
+{
+    display: flex;
+    margin: 0;
+    width: 480px;
+    align-items: center;
+}
+
+.urlBoxSpecial
+{
+    margin: 2px 2px 2px 5px;
+}
+
+.visible
+{
+    display: inline;
+}
+
+.invisible
+{
+    display: none;
+}
+
+.urlValidatorOk
+{
+    flex-basis: 0;
+    width: 28px;
+    height: 28px;
+    flex: auto;
+}
+
+.urlValidatorFail
+{    
+    width: 28px;
+    height: 28px;
+    flex: auto;
 }

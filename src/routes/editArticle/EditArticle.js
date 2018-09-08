@@ -10,6 +10,8 @@ import { guid, quillToolbarOptions, htmlNonEmpty } from '../../utility';
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
 
+var urlRegex = RegExp("^([A-Za-z0-9_-]*)$");
+
 class EditArticle extends React.Component {
   static propTypes = {};
 
@@ -28,9 +30,9 @@ class EditArticle extends React.Component {
 updateTitle(value) { this.setState({Title:value, validatorTitle:null}); }
 updatePageTitle(value) { this.setState({PageTitle:value, validatorPageTitle:null}); }
 updateKeywords(value) { this.setState({Keywords:value, validatorKeywords:null}); }
-updateUrl(value) { this.setState({Url:value, validatorUrl:null}); } // somewhere here I regretted I didn't choose Angular
+updateUrl(value) { this.setState({Url:value, validatorUrl:null}); this.checkUrl(value); } 
 updateTokenA(value) { this.setState({TokenA:value, validatorTokenA:null}); }
-updateTokenB(value) { this.setState({TokenB:value, validatorTokenB:null}); }
+updateTokenB(value) { this.setState({TokenB:value, validatorTokenB:null}); } // somewhere here I regretted I didn't choose Angular
 updateShortA(value) { this.setState({ShortA:value, validatorShortA:null}); }
 updateShortB(value) { this.setState({ShortB:value, validatorShortB:null}); }
 
@@ -48,6 +50,21 @@ onContentChanged(content)
   this.setState({ Content:content, validatorContent:null });
 }
 
+async checkUrl(url)
+{
+  if (!url || url === 'new' || !urlRegex.test(url))
+  {
+    this.setState({ urlUnique: false });
+    return;
+  }
+  var id = 'null';
+  if (this.props.data && this.props.data._id)
+    id = this.props.data._id;
+  var check = await this.props.fetch('/api/checkArticleUrl/' + id +'/' + url,  {method:'GET', headers: { "Content-Type": "application/json" }});
+  var result = await check.json();
+  this.setState({ urlUnique: result.success });
+}
+
 async onSave()
 {
   var valid = true;
@@ -62,6 +79,11 @@ async onSave()
           validatorSetter["validator"+item] = s.validationFail;          
         }
     });
+  if (this.state.urlUnique === false)
+  {
+    valid = false;
+    validatorSetter.validatorUrl = s.validationFail;
+  }
   if (!this.state.Content || !htmlNonEmpty(this.state.Content))
   {
     valid = false;
@@ -118,9 +140,13 @@ onCancel()
               <TextInput className={classnames(s.textInput, s.grid12, this.state.validatorPageTitle)} placeholder="Повна назва статті, наприклад: Вірно чи правильно?"
                 onSave={this.updatePageTitle.bind(this)} value={this.state.PageTitle}
                 hint="Назва, яка відображатиметься в заголовку вкладки у веб-оглядачі. Бажано використовувати формат: [Підозріла лексема] чи [надійна лексема]?, наприклад: «Вірно чи правильно?»." />
-              <TextInput className={classnames(s.textInput, s.grid21, this.state.validatorUrl)} placeholder="Адреса сторінки латинкою, наприклад: virno"
-                onSave={this.updateUrl.bind(this)} value={this.state.Url}
-                hint="Фрагмент URL, який використовуватиметься для навігації до цієї сторінки. Повинен бути унікальним (перевірка виконується автоматично). Найкраще, якщо це буде латинізація короткої назви (наприклад, «virno»)." />
+               <div className={classnames(s.urlValidator, s.grid21)}>
+                  <TextInput className={classnames(s.textInput, s.urlBoxSpecial, this.state.validatorUrl)} placeholder="Адреса сторінки латинкою, наприклад: virno"
+                    onSave={this.updateUrl.bind(this)} value={this.state.Url}
+                    hint="Фрагмент URL, який використовуватиметься для навігації до цієї сторінки. Повинен бути унікальним (перевірка виконується автоматично). Найкраще, якщо це буде латинізація короткої назви (наприклад, «virno»)." />
+                  <img className={classnames(s.urlValidatorOk, this.state.urlUnique === true ? s.visible : s.invisible)} src='/images/ok.png' />
+                  <img className={classnames(s.urlValidatorFail, this.state.urlUnique === false ? s.visible : s.invisible)} src='/images/error.png' />
+              </div>
               <TextInput className={classnames(s.textInput, s.grid22, this.state.validatorKeywords)} placeholder="Ключові слова через кому: вірно, вірний, вірніше"
                 onSave={this.updateKeywords.bind(this)} value={this.state.Keywords}
                 hint="Перелік розділених комою ключових слів, за якими користувачі сайту шукатимуть цю статтю. Включіть сюди також похідні та споріднені слова з інших частин мови, наприклад: «співпадіння, співпадати». Важливо вказати саме підозрілу лексему – користувачі рідко шукають статтю за надійною лексемою." />

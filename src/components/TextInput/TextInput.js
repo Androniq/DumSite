@@ -14,15 +14,14 @@ class TextInput extends React.Component {
     this.placeholder = props.placeholder;
     this.onSave = props.onSave || (() => {});
     this.state = {
-      value: props.value || ''
+      value: props.value || '',
+      popupOpen: false
     };
     allInstances.push(this);
   }
   
 
 static propTypes = {};
-
-state={popupOpen:false};
 
  async _onChange(event) {
     await this.setState({

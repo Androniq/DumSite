@@ -47,6 +47,7 @@ import { UserContext } from './UserContext.js';
 import { rethrow } from 'rsvp';
 import { getArgument, getNewArgument } from './serverLogic/getArgument';
 import setArgument from './serverLogic/setArgument';
+import checkArticleUrl from './serverLogic/checkArticleUrl';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -305,6 +306,12 @@ app.post('/api/setArgument', async (req, res) => {
   await serverReady();
   var resp = await setArgument(getUser(req), req.body);
   res.send(resp);
+});
+
+app.get('/api/checkArticleUrl/:id/:url', async (req, res) => {
+  await serverReady();
+  const result = await checkArticleUrl(req.params.url, req.params.id);
+  res.send(result);
 });
 
 app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
