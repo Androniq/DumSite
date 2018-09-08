@@ -40,6 +40,7 @@ class TextInput extends React.Component {
             <input
                 className={this.props.className}
                 type="text"
+                maxLength={this.props.maxLength}
                 onChange={this._onChange.bind(this)}
                 onKeyDown={this._onKeyDown.bind(this)}
                 placeholder={this.placeholder}

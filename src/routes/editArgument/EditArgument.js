@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
-import { guid, quillToolbarOptions } from '../../utility';
+import { guid, quillToolbarOptions, htmlNonEmpty } from '../../utility';
 import Select from 'react-select';
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
@@ -44,8 +44,8 @@ getVoteDescription(id)
   return item && item.Description;
 }
 
-updateVote(value) { this.setState({ Vote: value, voteDescription: this.getVoteDescription(value.value) }); }
-updatePriority(value) { this.setState({ Priority: value , priorityDescription: this.getPriorityDescription(value.value) }); }
+updateVote(value) { this.setState({ Vote: value, voteDescription: this.getVoteDescription(value.value), voteValidator: null }); }
+updatePriority(value) { this.setState({ Priority: value, priorityDescription: this.getPriorityDescription(value.value), priorityValidator: null }); }
 updateContent(value) { this.setState({Content:value}); }
 
 componentWillMount()
@@ -59,11 +59,35 @@ componentWillMount()
 
 onContentChanged(content)
 {
-  this.setState({ Content: content });
+  this.setState({ Content: content, contentValidator: null });
 }
 
 async onSave()
 {
+  var valid = true;
+  if (!this.state.Priority.value)
+  {
+    valid = false;
+    await this.setState({ priorityValidator: s.validationFail });
+  }
+
+  if (!this.state.Vote.value)
+  {
+    valid = false;
+    await this.setState({ voteValidator: s.validationFail });
+  }
+
+  if (!this.state.Content || !htmlNonEmpty(this.state.Content))
+  {
+    valid = false;
+    await this.setState({ contentValidator: s.validationFail });
+  }
+
+  if (!valid)
+  {
+    return;
+  }
+
   var argument = this.props.data.argument;
   argument.Vote = this.state.Vote.value;
   argument.Priority = this.state.Priority.value;
@@ -106,14 +130,14 @@ onCancel()
             </div>
             <div className={s.editArgumentGrid}>
               <Select
-                className={classnames(s.comboBox, s.grid11)}
+                className={classnames(s.comboBox, s.grid11, this.state.priorityValidator)}
                 options={this.props.data.priorityItems}
                 onChange={this.updatePriority.bind(this)}
                 placeholder="Виберіть пріоритет"
                 styles={{placeholder:this.placeholderApplyStyle}}
                 defaultValue={this.props.data.priorityItems.find(it => it.value === this.props.data.argument.Priority)} />
               <Select
-                className={classnames(s.comboBox, s.grid12)}
+                className={classnames(s.comboBox, s.grid12, this.state.voteValidator)}
                 options={this.props.data.voteItems}
                 onChange={this.updateVote.bind(this)}
                 placeholder="На користь якого варіанту ваш аргумент?"
@@ -126,7 +150,7 @@ onCancel()
                 <FormattedText html={this.state.voteDescription }/>
               </div>
             </div>
-            <div className={s.contentEditor}>
+            <div className={classnames(s.contentEditor, this.state.contentValidator)}>
               <ReactQuill value={this.state.Content} modules={{toolbar: quillToolbarOptions}}
                 onChange={this.onContentChanged.bind(this)} />
             </div>

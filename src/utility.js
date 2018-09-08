@@ -1,3 +1,7 @@
+import XRegExp from 'xregexp';
+
+const letterRegex = XRegExp("\\p{L}");
+
 export const USER_LEVEL_VISITOR = 1;
 export const USER_LEVEL_MEMBER = 2;
 export const USER_LEVEL_MODERATOR = 3;
@@ -36,6 +40,22 @@ export function guid()
 {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
       s4() + '-' + s4() + s4() + s4();
+}
+
+export function htmlNonEmpty(html)
+{
+	let tag = false;
+	for (let index = 0; index < html.length; index++)
+	{
+		let chr = html[index];
+		if (chr === '<')
+			tag = true;
+		if (chr === '>')
+			tag = false;
+		else if (!tag && letterRegex.test(chr))
+			return true;
+	}
+	return false;
 }
 
 export const quillToolbarOptions = [
