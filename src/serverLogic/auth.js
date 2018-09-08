@@ -38,6 +38,7 @@ export async function findOrCreateUser(token, type, profile)
 	}
 	if (user) { return user; }
 	let newUser;
+	var noOwner = !mongoAsync.serverConfig.owner;
 	switch(type)
 	{
 		case "google":
@@ -68,6 +69,7 @@ export async function findOrCreateUser(token, type, profile)
 				if (profile.name.familyName)
 					newUser.displayName += profile.name.familyName;
 			}
+			if (noOwner) newUser.role = 'owner';
 			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
 			break;
 		case "facebook":
@@ -98,11 +100,16 @@ export async function findOrCreateUser(token, type, profile)
 				if (profile.name.familyName)
 					newUser.displayName += profile.name.familyName;
 			}
+			if (noOwner) newUser.role = 'owner';
 			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
 			break;
 		case "local":
 			// TODO: read fields from profile
 			break;
+	}
+	if (noOwner)
+	{
+		await mongoAsync.setServerConfig({ owner: user._id });
 	}
   return user;
 }

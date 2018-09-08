@@ -54,6 +54,14 @@ async function getDbCollections() {
     url,
     async (err, client) => {
       const db = client.db(dbName);
+      const dbServerConfig = await getCollection(db, 'ServerConfig');
+
+      const serverConfig = await dbServerConfig.findOne();
+      if (!serverConfig || !serverConfig.isOperational)
+      {
+        await db.dropDatabase();
+        await dbServerConfig.insert({ isOperational: true });
+      }
 
       const dbArticles = await getCollection(db, 'Articles');
       const dbVotes = await getCollection(db, 'Votes');
@@ -66,6 +74,7 @@ async function getDbCollections() {
       const dbBlog = await getCollection(db, 'Blog');
 
       mongoAsync.dbCollections = {
+        serverConfig: dbServerConfig,
         articles: dbArticles,
         votes: dbVotes,
         priorities: dbPriorities,
@@ -85,6 +94,16 @@ async function getDbCollections() {
         votes: votesPreload,
         priorities: prioritiesPreload,
         colors: colorsPreload,
+      };
+
+      mongoAsync.serverConfig = serverConfig;
+      mongoAsync.setServerConfig = async (config) =>
+      {
+        for (var propName in config)
+        {
+          mongoAsync.serverConfig[propName] = config[propName];
+        }
+        mongoAsync.serverConfig = await mongoAsync.dbCollections.serverConfig.updateOne({ _id: mongoAsync.serverConfig._id }, { $set: serverConfig });
       };
 
       mongoAsync.ready = true;

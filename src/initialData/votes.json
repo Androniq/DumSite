@@ -23,7 +23,7 @@
      },
      {
         "Title": "Рівнозначні",
-        "Description": "<p><span style=\"background-color:#00ff00\">Зелений<\/span>: обидві лексеми правильні, рівнозначні та синонімічні<\/p>",
+        "Description": "<p><span style=\"background-color:#00a000;color:#ffffff\">Зелений<\/span>: обидві лексеми правильні, рівнозначні та синонімічні<\/p>",
         "Code": "EQ",
         "ShortDescriptionTemplate": "Рівнозначні",
         "ID": "c36ae448-dd14-4417-a397-fd8cd77dc285",
