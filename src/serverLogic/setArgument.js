@@ -38,7 +38,7 @@ export default async function setArgument(user, arg)
 	}
 	else if (isProposal)
 	{
-		await mongoInsert(mongoAsync.dbCollections.argumentProposals, arg, user);
+		await mongoInsert(mongoAsync.dbCollections.proposedArguments, arg, user);
 	}
 	else
 	{
