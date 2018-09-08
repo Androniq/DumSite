@@ -291,13 +291,13 @@ app.post('/api/setArticle', async (req, res) => {
 
 app.get('/api/getNewArgument/:id', async (req, res) => {
   await serverReady();
-  const argument = await getNewArgument(req.params.id);
+  const argument = await getNewArgument(getUser(req), req.params.id);
   res.send(argument);
 });
 
 app.get('/api/getArgument/:id', async (req, res) => {
   await serverReady();
-  const argument = await getArgument(req.params.id);
+  const argument = await getArgument(getUser(req), req.params.id);
   res.send(argument);
 });
 

@@ -56,9 +56,9 @@ componentWillMount()
 
 async onSave()
 {
-  var argument = this.props.data;
-  argument.Vote = this.state.Vote;
-  argument.Priority = this.state.Priority;
+  var argument = this.props.data.argument;
+  argument.Vote = this.state.Vote.value;
+  argument.Priority = this.state.Priority.value;
   argument.Content = this.state.Content;
   var text = JSON.stringify(argument);
 
@@ -66,7 +66,7 @@ async onSave()
   var resj = await res.json();
   if (resj.success)
   {
-    history.push('/article/' + this.props.articleUrl);
+    history.push('/article/' + this.props.data.article.Url);
   }
   else
   {
@@ -85,13 +85,17 @@ placeholderApplyStyle(style)
 
 onCancel()
 {
-  history.push('/article/' + this.props.articleUrl);
+  history.push('/article/' + this.props.data.article.Url);
 }
 
   render()
   {
       return (
           <div className={s.editArgumentContainer}>
+            <div className={s.tokenHeader}>
+              <span className={classnames(s.tokenBase, s.tokenA)}>{this.props.data.article.TokenA}</span>
+              <span className={classnames(s.tokenBase, s.tokenB)}>{this.props.data.article.TokenB}</span>
+            </div>
             <div className={s.editArgumentGrid}>
               <Select
                 className={classnames(s.comboBox, s.grid11)}

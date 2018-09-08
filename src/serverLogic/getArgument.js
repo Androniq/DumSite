@@ -19,8 +19,13 @@ import {
 
 import { ObjectID } from 'mongodb';
     
-export async function getArgument(id)
+export async function getArgument(user, id)
 {
+    if (!checkPrivilege(user, USER_LEVEL_MODERATOR))
+    {
+        return { success: false, message: "Insufficient privileges" };
+    }
+
     var arg = await mongoAsync.dbCollections.arguments.findOne({ _id: new ObjectID(id) });
     var article = await mongoAsync.dbCollections.articles.findOne({ ID: arg.Article });
     var votes = mongoAsync.preloads.votes;
@@ -33,8 +38,14 @@ export async function getArgument(id)
     return res;
 }
 
-export async function getNewArgument(url)
+export async function getNewArgument(user, url)
 {
+    if (!checkPrivilege(user, USER_LEVEL_MEMBER))
+    {
+        return { success: false, message: "Insufficient privileges" };
+    }
+
+    var isProposal = !checkPrivilege(user, USER_LEVEL_MODERATOR);
     var article = await mongoAsync.dbCollections.articles.findOne({ Url: url });
     if (!article)
     {
@@ -46,6 +57,6 @@ export async function getNewArgument(url)
     {
         vote.ShortDescription = vote.ShortDescriptionTemplate.replace('%A%', article.ShortA).replace('%B%', article.ShortB);
     });
-    var res = { argument: { Article: article.ID }, article, votes, priorities };
+    var res = { argument: { Article: article.ID }, article, votes, priorities, isProposal };
     return res;
 }

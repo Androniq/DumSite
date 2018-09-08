@@ -125,6 +125,11 @@ clickEdit()
   history.push('/editArticle/' + this.props.data.article.Url);
 }
 
+clickArgument()
+{
+  history.push('/editArgument/new/' + this.props.data.article.Url);
+}
+
   render() {
     return (
       <div className={s.infoArea}>
@@ -150,7 +155,7 @@ clickEdit()
                   {this.voteButton('BA', s.pvButtonBA, s.pvButtonYellow)}
                 </div>
               </Popup>              
-              <button className={s.buttonVote}>Аргументувати...</button>
+              <button className={s.buttonVote} onClick={this.clickArgument.bind(this)}>Аргументувати...</button>
               {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
               <button className={s.buttonVote} onClick={this.clickEdit.bind(this)} href="">Редагувати</button>
               ):""}

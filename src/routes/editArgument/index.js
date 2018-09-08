@@ -25,7 +25,7 @@ async function action({ fetch }, params) {
     var data = await editArgumentResp.json();
   return {
     chunks: ['editArgument'],
-    title: isNew ? 'Новий аргумент' : 'Редагування аргументу',
+    title: isNew ? (data.isProposal ? 'Пропозиція' : 'Новий аргумент') : 'Редагування аргументу',
     component: (
       <Layout>
         <EditArgument data={data} fetch={fetch} />
