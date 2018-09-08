@@ -78,7 +78,9 @@ onCancel()
   if (this.props.data && this.props.data.Url)
     history.push('/article/' + this.props.data.Url);
   else
-    history.pull();
+    {
+      history.goBack();
+    }
 }
 
   render()

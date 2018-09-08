@@ -8,6 +8,7 @@ import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
 import { guid } from '../../utility';
 import Select from 'react-select';
+import ReactQuill from 'react-quill';
 
 class EditArgument extends React.Component {
   static propTypes = {};
@@ -52,6 +53,11 @@ componentWillMount()
   {
     this.setState(argument);
   }
+}
+
+onContentChanged(content)
+{
+  this.setState({ Content: content });
 }
 
 async onSave()
@@ -118,7 +124,10 @@ onCancel()
                 <span dangerouslySetInnerHTML={{ __html: this.state.voteDescription }}/>
               </div>
             </div>
-            <div className={s.contentEditor}></div>
+            <div className={s.contentEditor}>
+              <ReactQuill value={this.state.Content}
+                onChange={this.onContentChanged.bind(this)} />
+            </div>
             <div className={s.buttonsContainer}>
               <button className={s.buttonSave} onClick={this.onSave.bind(this)}>Зберегти</button>
               <button className={s.buttonSave} onClick={this.onCancel.bind(this)}>Повернутися</button>
