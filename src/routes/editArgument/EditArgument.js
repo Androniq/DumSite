@@ -10,6 +10,7 @@ import { guid, quillToolbarOptions } from '../../utility';
 import Select from 'react-select';
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
+import FormattedText from '../../components/FormattedText/FormattedText';
 
 class EditArgument extends React.Component {
   static propTypes = {};

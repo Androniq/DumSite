@@ -16,7 +16,9 @@ class FormattedText extends React.Component {
 
   render() {
     return (
+      <span className={s.outerSpan}>
         <span dangerouslySetInnerHTML={{__html: this.props.html}} />
+      </span>
     );
   }
 }
