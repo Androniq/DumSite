@@ -48,6 +48,8 @@ import { rethrow } from 'rsvp';
 import { getArgument, getNewArgument } from './serverLogic/getArgument';
 import setArgument from './serverLogic/setArgument';
 import checkArticleUrl from './serverLogic/checkArticleUrl';
+import deleteArgument from './serverLogic/deleteArgument';
+import deleteArticle from './serverLogic/deleteArticle';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -305,6 +307,18 @@ app.get('/api/getArgument/:id', async (req, res) => {
 app.post('/api/setArgument', async (req, res) => {
   await serverReady();
   var resp = await setArgument(getUser(req), req.body);
+  res.send(resp);
+});
+
+app.delete('/api/deleteArgument/:id', async (req, res) => {
+  await serverReady();
+  var resp = await deleteArgument(getUser(req), req.params.id);
+  res.send(resp);
+});
+
+app.delete('/api/deleteArticle/:id', async (req, res) => {
+  await serverReady();
+  var resp = await deleteArticle(getUser(req), req.params.id);
   res.send(resp);
 });
 

@@ -19,6 +19,7 @@ import {
 import history from '../../history';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
+import Link from '../../components/Link/Link';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -176,6 +177,8 @@ clickArgument()
             </div>
           )}
         </UserContext.Consumer>
+        <UserContext.Consumer>
+          {context => (
         <div className={s.prioritiesContainer}>
           {this.props.data.priorityList.map(priority =>
           <div key={priority.priority._id} className={s.priorityContainer}>
@@ -195,7 +198,12 @@ clickArgument()
                 <div key={argument._id} className={s.argumentContainer}>
                   <div className={s.argumentHeader}>
                     <span className={s.argumentTitle}>{priority.priority.Title}</span>
-                    <span className={s.argumentVote}>{argument.voteFor}</span>
+                    <span className={s.argumentVote}>{argument.voteFor}</span>     
+                    {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
+                      <Link to={"/editArgument/" + argument._id}>
+                        <img className={s.argumentEditButton} src="/images/edit.png" />
+                      </Link>
+                    ) : ""}             
                   </div>
                   <div className={s.argumentBody}>
                     <FormattedText html={argument.Content} />
@@ -207,6 +215,8 @@ clickArgument()
           </div>
           )}
         </div>
+          )}
+        </UserContext.Consumer>
       </div>
     );
   }

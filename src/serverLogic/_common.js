@@ -99,6 +99,11 @@ export async function mongoUpdate(collection, item)
 	return await collection.updateOne({ _id: id }, { $set: item });
 }
 
+export async function mongoDelete(collection, id)
+{
+  return await collection.deleteOne({ _id: new ObjectID(id) });
+}
+
 // User privileges
 
 export const USER_LEVEL_VISITOR = 1;

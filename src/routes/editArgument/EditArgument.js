@@ -11,6 +11,7 @@ import Select from 'react-select';
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
+import Popup from "reactjs-popup";
 
 class EditArgument extends React.Component {
   static propTypes = {};
@@ -30,6 +31,7 @@ class EditArgument extends React.Component {
     this.props.data.voteItems = this.props.data.votes.map(it => { return { value: it.ID, label: it.ShortDescription }; });
     this.state.voteDescription = this.getVoteDescription(this.props.data.argument.Vote);
     this.state.priorityDescription = this.getPriorityDescription(this.props.data.argument.Priority);
+    this.state.Content = this.props.data.argument.Content;
   }
 
 getPriorityDescription(id)
@@ -120,6 +122,30 @@ onCancel()
   history.push('/article/' + this.props.data.article.Url);
 }
 
+onDelete()
+{
+  this.setState({assertDelete:true});
+}
+
+onCancelDeletion()
+{
+  this.setState({assertDelete:false});
+}
+
+async onDeleteDo()
+{
+  var res = await this.props.fetch('/api/deleteArgument/' + this.props.data.argument._id, {method:'DELETE', headers: { "Content-Type": "application/json" }});
+  var resj = await res.json();
+  if (resj.success)
+  {
+    history.push('/article/' + this.props.data.article.Url);
+  }
+  else
+  {
+    console.error(resj.message);
+  }
+}
+
   render()
   {
       return (
@@ -157,7 +183,19 @@ onCancel()
             <div className={s.buttonsContainer}>
               <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>
               <BlueButton onClick={this.onCancel.bind(this)}>Повернутися</BlueButton>
+              {this.props.data.argument && this.props.data.argument._id ? (
+                <BlueButton onClick={this.onDelete.bind(this)}>Видалити аргумент</BlueButton>
+              ) : ""}
             </div>
+            <Popup modal open={this.state.assertDelete} onClose={this.onCancelDeletion.bind(this)}>
+              <div className={s.modalContainer}>
+                <span className={s.modalText}>Ви точно бажаєте видалити цей аргумент?</span>
+                <div className={s.modalButtons}>
+                  <BlueButton onClick={this.onDeleteDo.bind(this)}>Так</BlueButton>
+                  <BlueButton onClick={this.onCancelDeletion.bind(this)}>Ні</BlueButton>
+                </div>
+              </div>
+            </Popup>
           </div>
       );
   }

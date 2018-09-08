@@ -6,9 +6,10 @@ import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
-import { guid, quillToolbarOptions, htmlNonEmpty } from '../../utility';
+import { guid, quillToolbarOptions, htmlNonEmpty, checkPrivilege, USER_LEVEL_ADMIN } from '../../utility';
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
+import Popup from "reactjs-popup";
 
 var urlRegex = RegExp("^([A-Za-z0-9_-]*)$");
 
@@ -129,6 +130,30 @@ onCancel()
     }
 }
 
+onDelete()
+{
+  this.setState({assertDelete:true});
+}
+
+onCancelDeletion()
+{
+  this.setState({assertDelete:false});
+}
+
+async onDeleteDo()
+{
+  var res = await this.props.fetch('/api/deleteArticle/' + this.props.data._id, {method:'DELETE', headers: { "Content-Type": "application/json" }});
+  var resj = await res.json();
+  if (resj.success)
+  {
+    history.push('/');
+  }
+  else
+  {
+    console.error(resj.message);
+  }
+}
+
   render()
   {    
       return (
@@ -170,6 +195,20 @@ onCancel()
             <div className={s.buttonsContainer}>
               <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>
               <BlueButton onClick={this.onCancel.bind(this)}>Повернутися</BlueButton>
+              <UserContext.Consumer>
+                {context => this.props.data && this.props.data._id && checkPrivilege(context.user, USER_LEVEL_ADMIN) ? (
+                  <BlueButton onClick={this.onDelete.bind(this)}>Видалити статтю</BlueButton>
+                ) : ""}
+              </UserContext.Consumer>
+              <Popup modal open={this.state.assertDelete} onClose={this.onCancelDeletion.bind(this)}>
+                <div className={s.modalContainer}>
+                  <span className={s.modalText}>Ви точно бажаєте видалити цю статтю?</span>
+                  <div className={s.modalButtons}>
+                    <BlueButton onClick={this.onDeleteDo.bind(this)}>Так</BlueButton>
+                    <BlueButton onClick={this.onCancelDeletion.bind(this)}>Ні</BlueButton>
+                  </div>
+                </div>
+              </Popup>
             </div>
           </div>
       );

@@ -257,6 +257,7 @@
     flex-grow: 1;
     text-align: left;
     font-weight: bold;
+    align-items: center;
 }
 
 .argumentVote
@@ -274,4 +275,11 @@
     border-radius: 20px;
     padding: 0px 20px;
     margin: 1px 3px;    
+}
+
+.argumentEditButton
+{
+    width: 24px;
+    height: 24px;  
+    margin: -1px -8px 1px 8px;
 }

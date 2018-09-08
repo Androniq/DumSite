@@ -140,3 +140,23 @@
     height: 28px;
     flex: auto;
 }
+
+.modalContainer
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modalText
+{
+    text-align: center;
+    font-weight: 600;
+}
+
+.modalButtons
+{
+    display: flex;
+    flex-direction: row;
+    width: 600px;
+}
