@@ -7,6 +7,7 @@ import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
 import { guid } from '../../utility';
+import ReactQuill from 'react-quill';
 
 class EditArticle extends React.Component {
   static propTypes = {};
@@ -20,7 +21,7 @@ class EditArticle extends React.Component {
     TokenB: '',
     ShortA: '',
     ShortB: '',
-    Content: ''
+    Content: { text: '' }
   };
 
 updateTitle(value) { this.setState({Title:value}); }
@@ -39,6 +40,11 @@ componentWillMount()
   {
     this.setState(article);
   }
+}
+
+onContentChanged(content)
+{
+  this.setState({Content:content});
 }
 
 async onSave()
@@ -101,7 +107,9 @@ onCancel()
                 onSave={this.updateShortB.bind(this)} value={this.state.ShortB}
                 hint="Коротке позначення лексеми Б, яке відображатиметься на кнопках для голосування. Його потрібно писати з малої літери і без наголосів. Максимальна довжина – 16 символів. Наприклад: «правильно»." />
             </div>
-            <div className={s.contentEditor}></div>
+            <div className={s.contentEditor}>
+              <ReactQuill value={this.state.Content} onChange={this.onContentChanged.bind(this)} />
+            </div>
             <div className={s.buttonsContainer}>
               <button className={s.buttonSave} onClick={this.onSave.bind(this)}>Зберегти</button>
               <button className={s.buttonSave} onClick={this.onCancel.bind(this)}>Повернутися</button>
