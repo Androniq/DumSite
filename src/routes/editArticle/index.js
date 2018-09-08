@@ -25,7 +25,7 @@ async function action({ fetch }, params) {
     title: article ? ('Редагування: ' + article.PageTitle) : 'Нова стаття',
     component: (
       <Layout>
-        <EditArticle data={article || {}} fetch={fetch} />
+        <EditArticle data={article || { Content: { text: '' } }} fetch={fetch} />
       </Layout>
     ),
   };

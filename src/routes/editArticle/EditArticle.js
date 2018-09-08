@@ -21,7 +21,7 @@ class EditArticle extends React.Component {
     TokenB: '',
     ShortA: '',
     ShortB: '',
-    Content: { text: '' }
+    Content: ''
   };
 
 updateTitle(value) { this.setState({Title:value}); }
@@ -44,7 +44,7 @@ componentWillMount()
 
 onContentChanged(content)
 {
-  this.setState({Content:content});
+  this.setState({ Content:content });//.replace('<strong>','<span style=\"font-weight:bold;">').replace('</strong>','</span>')});
 }
 
 async onSave()
@@ -58,6 +58,7 @@ async onSave()
   article.TokenB = this.state.TokenB;
   article.ShortA = this.state.ShortA;
   article.ShortB = this.state.ShortB;
+  article.Content = this.state.Content;
   var text = JSON.stringify(article);
 
   var res = await this.props.fetch('/api/setArticle', {method:'POST', body: text, headers: { "Content-Type": "application/json" }});
@@ -74,7 +75,10 @@ async onSave()
 
 onCancel()
 {
-  history.push('/article/' + this.props.data.Url);
+  if (this.props.data && this.props.data.Url)
+    history.push('/article/' + this.props.data.Url);
+  else
+    history.pull();
 }
 
   render()
@@ -108,7 +112,8 @@ onCancel()
                 hint="Коротке позначення лексеми Б, яке відображатиметься на кнопках для голосування. Його потрібно писати з малої літери і без наголосів. Максимальна довжина – 16 символів. Наприклад: «правильно»." />
             </div>
             <div className={s.contentEditor}>
-              <ReactQuill value={this.state.Content} onChange={this.onContentChanged.bind(this)} />
+              <ReactQuill value={this.state.Content}
+                onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
               <button className={s.buttonSave} onClick={this.onSave.bind(this)}>Зберегти</button>
