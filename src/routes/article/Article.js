@@ -18,6 +18,7 @@ import {
   USER_LEVEL_OWNER } from '../../utility';
 import history from '../../history';
 import BlueButton from '../../components/BlueButton/BlueButton';
+import FormattedText from '../../components/FormattedText/FormattedText';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -140,7 +141,7 @@ clickArgument()
           <span className={classnames(s.tokenBase, s.tokenB)}>{this.props.data.article.TokenB}</span>
         </div>
         <h3 className={s.generalResult}>{this.props.data.result.Description}</h3>
-        <span dangerouslySetInnerHTML={{__html: this.props.data.article.Content}}></span>
+        <FormattedText html={this.props.data.article.Content} />
         <Chart type="horizontalBar" data={this.chartData(this.props.data)} options={this.chartOptions()} />
         <span className={s.totalVotes}>Усього голосів: {this.props.data.totalPopular}</span>
         <UserContext.Consumer>
@@ -197,7 +198,7 @@ clickArgument()
                     <span className={s.argumentVote}>{argument.voteFor}</span>
                   </div>
                   <div className={s.argumentBody}>
-                    <span className={s.argumentBodySpan} dangerouslySetInnerHTML={{__html: argument.Content}} />
+                    <FormattedText html={argument.Content} />
                   </div>
                 </div>
               )}

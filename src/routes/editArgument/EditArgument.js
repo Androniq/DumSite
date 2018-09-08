@@ -119,10 +119,10 @@ onCancel()
                 styles={{placeholder:this.placeholderApplyStyle}}
                 defaultValue={this.props.data.voteItems.find(it => it.value === this.props.data.argument.Vote)} />
               <div className={classnames(s.descriptionBox, s.grid21)}>
-                <span dangerouslySetInnerHTML={{ __html: this.state.priorityDescription }}/>
+                <FormattedText html={this.state.priorityDescription }/>
               </div>
               <div className={classnames(s.descriptionBox, s.grid22)}>
-                <span dangerouslySetInnerHTML={{ __html: this.state.voteDescription }}/>
+                <FormattedText html={this.state.voteDescription }/>
               </div>
             </div>
             <div className={s.contentEditor}>
