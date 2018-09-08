@@ -17,6 +17,7 @@ import {
 	USER_LEVEL_ADMIN,
   USER_LEVEL_OWNER } from '../../utility';
 import history from '../../history';
+import BlueButton from '../../components/BlueButton/BlueButton';
 
 class Article extends React.Component {
   static propTypes = {};
@@ -145,7 +146,7 @@ clickArgument()
         <UserContext.Consumer>
           {context => context.user ? context.user.confirmed ? !context.user.blocked ? (
             <div className={s.buttonContainer}>
-              <Popup trigger={<button className={s.buttonVote}>Голосувати!</button>} position="top center" modal>
+              <Popup trigger={<BlueButton>Голосувати!</BlueButton>} position="top center" modal>
                 <div className={s.pvContainer}>
                   {this.voteButton('A', s.pvButtonA, s.pvButtonRed)}
                   {this.voteButton('AB', s.pvButtonAB, s.pvButtonYellow)}
@@ -155,9 +156,9 @@ clickArgument()
                   {this.voteButton('BA', s.pvButtonBA, s.pvButtonYellow)}
                 </div>
               </Popup>              
-              <button className={s.buttonVote} onClick={this.clickArgument.bind(this)}>Аргументувати...</button>
+              <BlueButton onClick={this.clickArgument.bind(this)}>Аргументувати...</BlueButton>
               {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
-              <button className={s.buttonVote} onClick={this.clickEdit.bind(this)} href="">Редагувати</button>
+              <BlueButton onClick={this.clickEdit.bind(this)} href="">Редагувати</BlueButton>
               ):""}
             </div>
           ) : (

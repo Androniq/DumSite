@@ -1,0 +1,12 @@
+strong { font-weight: bold !important; }
+
+li
+{
+    font-style: normal;
+}
+
+span
+{
+    font-size: 20px;
+    text-align: justify;
+}

@@ -8,6 +8,7 @@ import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
 import { guid, quillToolbarOptions } from '../../utility';
 import ReactQuill from 'react-quill';
+import BlueButton from '../../components/BlueButton/BlueButton';
 
 class EditArticle extends React.Component {
   static propTypes = {};
@@ -118,8 +119,8 @@ onCancel()
                 onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
-              <button className={s.buttonSave} onClick={this.onSave.bind(this)}>Зберегти</button>
-              <button className={s.buttonSave} onClick={this.onCancel.bind(this)}>Повернутися</button>
+              <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>
+              <BlueButton onClick={this.onCancel.bind(this)}>Повернутися</BlueButton>
             </div>
           </div>
       );
