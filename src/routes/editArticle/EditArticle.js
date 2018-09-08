@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
-import { guid } from '../../utility';
+import { guid, quillToolbarOptions } from '../../utility';
 import ReactQuill from 'react-quill';
 
 class EditArticle extends React.Component {
@@ -84,7 +84,7 @@ onCancel()
 }
 
   render()
-  {
+  {    
       return (
           <div className={s.editArticleContainer}>
             <div className={s.editArticleGrid}>
@@ -114,7 +114,7 @@ onCancel()
                 hint="Коротке позначення лексеми Б, яке відображатиметься на кнопках для голосування. Його потрібно писати з малої літери і без наголосів. Максимальна довжина – 16 символів. Наприклад: «правильно»." />
             </div>
             <div className={s.contentEditor}>
-              <ReactQuill value={this.state.Content}
+              <ReactQuill value={this.state.Content} modules={{toolbar: quillToolbarOptions}}
                 onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>

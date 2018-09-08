@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { UserContext } from '../../UserContext';
 import TextInput from '../../components/TextInput/TextInput';
 import history from '../../history';
-import { guid } from '../../utility';
+import { guid, quillToolbarOptions } from '../../utility';
 import Select from 'react-select';
 import ReactQuill from 'react-quill';
 
@@ -125,7 +125,7 @@ onCancel()
               </div>
             </div>
             <div className={s.contentEditor}>
-              <ReactQuill value={this.state.Content}
+              <ReactQuill value={this.state.Content} modules={{toolbar: quillToolbarOptions}}
                 onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
