@@ -14,18 +14,21 @@ import EditArgument from './EditArgument';
 
 async function action({ fetch }, params) {
     var argumentId = params[0];
-    let argument = null;
-    if (argumentId && argumentId !== 'new')
+    if (!argumentId)
     {
-        const editArgumentResp = await fetch(`/api/getArgument/${params[0]}`, { method: 'GET' });
-        argument = await editArgumentResp.json();
+      // redirect 404
+      return null;
     }
+    var isNew = argumentId === 'new';
+    var fetchApi = isNew ? `/api/getNewArgument/${params[1]}` : `/api/getArgument/${argumentId}`;
+    var editArgumentResp = await fetch(fetchApi, { method: 'GET' });
+    var data = await editArgumentResp.json();
   return {
     chunks: ['editArgument'],
-    title: argument ? ('Редагування: ' + argument.PageTitle) : 'Нова стаття',
+    title: isNew ? 'Новий аргумент' : 'Редагування аргументу',
     component: (
       <Layout>
-        <EditArgument data={argument || {}} fetch={fetch} />
+        <EditArgument data={data} fetch={fetch} />
       </Layout>
     ),
   };
