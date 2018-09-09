@@ -32,8 +32,8 @@ export default async function deleteArticle(user, id)
     {
         return { success: false, message: "Article not found" };
     }
-    var arguments = await mongoAsync.dbCollections.arguments.find({ Article: objId });
-    var works = arguments.map(arg => mongoDelete(mongoAsync.dbCollections.arguments, arg._id));
+    var args = await mongoAsync.dbCollections.arguments.find({ Article: objId });
+    var works = args.map(arg => mongoDelete(mongoAsync.dbCollections.arguments, arg._id));
     works.push(mongoDelete(mongoAsync.dbCollections.articles, id));
     await Promise.all(works);
 	return { success: true };
