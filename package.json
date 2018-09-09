@@ -15,6 +15,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.51",
     "babel-cli": "^6.26.0",
+	"babel-node": "^6.5.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "chart.js": "^2.7.2",
@@ -166,14 +167,14 @@
     "test-watch": "yarn run test --watch --notify",
     "test-cover": "yarn run test --coverage",
     "coverage": "yarn run test-cover && opn coverage/lcov-report/index.html",
-    "clean": "babel-cli tools/run clean",
-    "copy": "babel-cli tools/run copy",
-    "bundle": "babel-cli tools/run bundle",
-    "build": "babel-cli tools/run build",
+    "clean": "babel-node tools/run clean",
+    "copy": "babel-node tools/run copy",
+    "bundle": "babel-node tools/run bundle",
+    "build": "babel-node tools/run build",
     "build-stats": "yarn run build --release --analyse",
-    "deploy": "babel-cli tools/run deploy",
-    "render": "babel-cli tools/run render",
-    "serve": "babel-cli tools/run runServer",
-    "start": "babel-cli tools/run start"
+    "deploy": "babel-node tools/run deploy",
+    "render": "babel-node tools/run render",
+    "serve": "babel-node tools/run runServer",
+    "start": "babel-node tools/run start"
   }
 }
