@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 class StickyMessage extends React.Component {
     static propTypes = {
-        message: PropTypes.string.isRequired,
+        message: PropTypes.string,
         visible: PropTypes.bool
     };
 

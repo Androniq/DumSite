@@ -123,7 +123,8 @@ async clickVoteDo(code, optionId)
   var message = await resp.json();
   if (message.success)
   {
-    await this.setState({ ownVote: code, votePopupOpen: false, stickyText: "Ваш голос враховано!" });
+    await this.setState({ ownVote: code, votePopupOpen: false,
+      stickyText: message.message === "Success (vote undone)" ? "Ви відкликали свій голос" : "Ваш голос враховано!" });
     showSticky(this);
   }
 }
