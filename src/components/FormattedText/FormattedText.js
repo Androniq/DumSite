@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 class FormattedText extends React.Component {
     static propTypes = {
-        html: PropTypes.string.isRequired
+        html: PropTypes.string
     };
 
     constructor(props)

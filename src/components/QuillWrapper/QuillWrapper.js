@@ -17,6 +17,15 @@ export default class QuillWrapper extends Component
     const Quill = this.quill;
     if (Quill)
     {
+      if (!this.props.value) // near killed my keyboard at this stupid bug with stupid workaround
+      {
+        return (
+          <Quill
+            onChange={this.props.onChange}
+            modules={{toolbar: quillToolbarOptions}}
+          />
+        );
+      }
       return (
         <Quill
           onChange={this.props.onChange}
