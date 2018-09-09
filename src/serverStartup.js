@@ -55,7 +55,10 @@ async function getDbCollections() {
   mongoClient.connect(
     url,
     async (err, client) => {
-
+      if (err)
+      {
+        throw err;
+      }
 
       const db = client.db(dbName);
       const dbServerConfig = await getCollection(db, 'ServerConfig');
