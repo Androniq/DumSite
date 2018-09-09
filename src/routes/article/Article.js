@@ -123,15 +123,9 @@ async clickVoteDo(code, optionId)
   var message = await resp.json();
   if (message.success)
   {
-    await this.setState({ ownVote: code, votePopupOpen: false });
+    await this.setState({ ownVote: code, votePopupOpen: false, stickyText: "Ваш голос враховано!" });
     showSticky(this);
-    //setTimeout(this.removeVoteMessage.bind(this), 2000);
   }
-}
-
-removeVoteMessage()
-{
-  this.setState({ stickyShown: false });
 }
 
 voteButton(code, buttonStyle, colorStyle)
@@ -153,12 +147,13 @@ clickArgument()
   history.push('/editArgument/new/' + this.props.data.article.Url);
 }
 
-componentDidMount()
+async componentDidMount()
 {
   var state = history.location.state;
   if (state && state.initMessage)
   {
-    
+    await this.setState({ stickyText: state.initMessage });
+    showSticky(this);
   }
 }
 
@@ -249,7 +244,7 @@ componentDidMount()
           )}
         </UserContext.Consumer>
       </div>
-      <StickyMessage message="Ваш голос враховано!" visible={this.state.stickyShown} />
+      <StickyMessage message={this.state.stickyText} visible={this.state.stickyShown} />
       </>
     );
   }

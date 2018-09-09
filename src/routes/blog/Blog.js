@@ -4,6 +4,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Blog.css';
 import classnames from 'classnames';
 import { UserContext } from '../../UserContext.js';
+import FormattedText from '../../components/FormattedText/FormattedText';
 
 class Blog extends React.Component {
   static propTypes = {};
@@ -24,7 +25,7 @@ class Blog extends React.Component {
                     </div>
                 </div>
               </div>
-              <span dangerouslySetInnerHTML={{__html: this.props.data.Content}} />
+              <FormattedText html={this.props.data.Content} />
           </div>
       );
   }

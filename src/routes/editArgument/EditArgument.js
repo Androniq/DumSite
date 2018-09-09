@@ -101,7 +101,12 @@ async onSave()
   var resj = await res.json();
   if (resj.success)
   {
-    history.push({pathname: '/article/' + this.props.data.article.Url, state: { initMessage: "Ваш аргумент прийнято до розгляду!" }});
+    var redirect = { pathname: '/article/' + this.props.data.article.Url };
+    if (this.props.data.isProposal)
+    {
+      redirect.state = { initMessage: "Ваш аргумент прийнято до розгляду!" };
+    }
+    history.push(redirect);
   }
   else
   {
@@ -181,7 +186,7 @@ async onDeleteDo()
               <QuillWrapper value={this.state.Content} onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
-              <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>
+              <BlueButton onClick={this.onSave.bind(this)}>{this.props.data.isProposal ? "Запропонувати" : "Зберегти"}</BlueButton>
               <BlueButton onClick={this.onCancel.bind(this)}>Повернутися</BlueButton>
               {this.props.data.argument && this.props.data.argument._id ? (
                 <BlueButton onClick={this.onDelete.bind(this)}>Видалити аргумент</BlueButton>
