@@ -152,13 +152,6 @@
     }
   },
   "scripts": {
-    "precommit": "lint-staged",
-    "lint-js": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" .",
-    "lint-css": "stylelint \"src/**/*.{css,less,styl,scss,sass,sss}\"",
-    "lint": "yarn run lint-js && yarn run lint-css",
-    "fix-js": "yarn run lint-js --fix",
-    "fix-css": "yarn run lint-css --fix",
-    "fix": "yarn run fix-js && yarn run fix-css",
     "flow": "flow",
     "flow:check": "flow check",
     "test": "jest",
