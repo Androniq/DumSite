@@ -1,3 +1,5 @@
+import { MONGO_PATH } from '../secretheroku';
+
 export const mongoClient = require('mongodb').MongoClient;
 
 export var mongoAsyncInternal = {};
@@ -43,7 +45,7 @@ async function getCollection(db, name) {
 async function getDbCollections() {
   const test = require('assert');
   // Connection url
-  const url = 'mongodb://localhost:27017';
+  const url = MONGO_PATH;
   // Database Name
   const dbName = 'DumGrammarSite';
 
