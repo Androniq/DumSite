@@ -57,7 +57,7 @@ async function getDbCollections() {
     async (err, client) => {
       if (err)
       {
-        throw url;
+        throw err;
       }
 
       const db = client.db(dbName);
