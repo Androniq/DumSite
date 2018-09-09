@@ -153,14 +153,27 @@
     }
   },
   "scripts": {
-  "clean": "rm -rf build && mkdir build",
-  "build-css": "node-sass scss/app.scss public/css/app.css",
-  "build-server": "babel -d ./build ./server -s",
-  "build": "npm run clean && npm run build-css && npm run build-server",
-  "lint": "eslint source/ --quiet",
-  "start": "node ./build/index.js",
-  "debug": "node --debug ./build/index.js",
-  "test": "for i in $(ls tests/); do babel-node \"./tests/${i}\" | faucet ; done",
-  "validate": "npm run lint; npm run test && npm outdated --depth 0"
+    "precommit": "lint-staged",
+    "lint-js": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" .",
+    "lint-css": "stylelint \"src/**/*.{css,less,styl,scss,sass,sss}\"",
+    "lint": "yarn run lint-js && yarn run lint-css",
+    "fix-js": "yarn run lint-js --fix",
+    "fix-css": "yarn run lint-css --fix",
+    "fix": "yarn run fix-js && yarn run fix-css",
+    "flow": "flow",
+    "flow:check": "flow check",
+    "test": "jest",
+    "test-watch": "yarn run test --watch --notify",
+    "test-cover": "yarn run test --coverage",
+    "coverage": "yarn run test-cover && opn coverage/lcov-report/index.html",
+    "clean": "rm -rf build && mkdir build",
+    "copy": "babel tools/run copy",
+    "bundle": "babel tools/run bundle",
+    "build": "babel tools/run build",
+    "build-stats": "yarn run build --release --analyse",
+    "deploy": "babel tools/run deploy",
+    "render": "babel tools/run render",
+    "serve": "babel tools/run runServer",
+    "start": "node ./build/server.js"
   }
 }
