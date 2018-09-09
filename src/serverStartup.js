@@ -1,3 +1,5 @@
+import { MONGO_PATH } from '../secretheroku';
+
 export const mongoClient = require('mongodb').MongoClient;
 
 export var mongoAsyncInternal = {};
@@ -43,9 +45,9 @@ async function getCollection(db, name) {
 async function getDbCollections() {
   const test = require('assert');
   // Connection url
-  const url = 'mongodb://localhost:27017';
+  const url = MONGO_PATH;
   // Database Name
-  const dbName = 'DumGrammarSite';
+  const dbName = 'heroku_r1s7050b';
 
   mongoAsync.client = mongoClient;
 
@@ -53,6 +55,11 @@ async function getDbCollections() {
   mongoClient.connect(
     url,
     async (err, client) => {
+      if (err)
+      {
+        throw {err, url};
+      }
+
       const db = client.db(dbName);
       const dbServerConfig = await getCollection(db, 'ServerConfig');
 

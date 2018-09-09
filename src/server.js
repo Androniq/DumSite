@@ -41,7 +41,7 @@ import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
 import setArticle from './serverLogic/setArticle';
 import { getBlogByUrl } from './serverLogic/blog';
-import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
+import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secretheroku.js';
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
 import { rethrow } from 'rsvp';
