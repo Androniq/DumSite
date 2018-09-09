@@ -101,7 +101,7 @@ async onSave()
   var resj = await res.json();
   if (resj.success)
   {
-    history.push('/article/' + this.props.data.article.Url);
+    history.push({pathname: '/article/' + this.props.data.article.Url, state: { initMessage: "Ваш аргумент прийнято до розгляду!" }});
   }
   else
   {

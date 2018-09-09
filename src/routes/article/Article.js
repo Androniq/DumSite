@@ -153,6 +153,15 @@ clickArgument()
   history.push('/editArgument/new/' + this.props.data.article.Url);
 }
 
+componentDidMount()
+{
+  var state = history.location.state;
+  if (state && state.initMessage)
+  {
+    
+  }
+}
+
   render() {
     return (
       <>
