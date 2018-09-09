@@ -60,7 +60,8 @@ async function getDbCollections() {
       if (!serverConfig || !serverConfig.isOperational)
       {
         await db.dropDatabase();
-        await dbServerConfig.insert({ isOperational: true });
+        await dbServerConfig.insertOne({ isOperational: true });
+        serverConfig = await dbServerConfig.findOne();
       }
 
       const dbArticles = await getCollection(db, 'Articles');
@@ -97,14 +98,6 @@ async function getDbCollections() {
       };
 
       mongoAsync.serverConfig = serverConfig;
-      mongoAsync.setServerConfig = async (config) =>
-      {
-        for (var propName in config)
-        {
-          mongoAsync.serverConfig[propName] = config[propName];
-        }
-        mongoAsync.serverConfig = await mongoAsync.dbCollections.serverConfig.updateOne({ _id: mongoAsync.serverConfig._id }, { $set: serverConfig });
-      };
 
       mongoAsync.ready = true;
       mongoAsyncInternal.serverReadyTrigger();

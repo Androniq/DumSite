@@ -132,3 +132,12 @@ export function checkPrivilege(user, level)
 {
 	return getLevel(user) + 0.1 /* sorry, I'm C# paranoid - scary number comparison */ >= level;
 }
+
+export async function setServerConfig(config)
+{
+  for (var propName in config)
+  {
+    mongoAsync.serverConfig[propName] = config[propName];
+  }
+  await mongoAsync.dbCollections.serverConfig.updateOne({ _id: mongoAsync.serverConfig._id }, { $set: config });
+};

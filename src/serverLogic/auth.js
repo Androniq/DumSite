@@ -6,7 +6,8 @@ import {
     getMiddleGround,
     shortLabel,
     mongoInsert,
-	mongoUpdate } from './_common';
+	mongoUpdate,
+    setServerConfig } from './_common';
 
 import {
 	getLevel,
@@ -70,7 +71,7 @@ export async function findOrCreateUser(token, type, profile)
 					newUser.displayName += profile.name.familyName;
 			}
 			if (noOwner) newUser.role = 'owner';
-			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
+			user = (await mongoInsert(mongoAsync.dbCollections.users, newUser)).ops[0];
 			break;
 		case "facebook":
 			newUser = { facebookId : token, facebookProfile : profile, role: "member", confirmed: true, blocked: false };
@@ -101,7 +102,7 @@ export async function findOrCreateUser(token, type, profile)
 					newUser.displayName += profile.name.familyName;
 			}
 			if (noOwner) newUser.role = 'owner';
-			user = await mongoInsert(mongoAsync.dbCollections.users, newUser);
+			user = (await mongoInsert(mongoAsync.dbCollections.users, newUser)).ops[0];
 			break;
 		case "local":
 			// TODO: read fields from profile
@@ -109,7 +110,7 @@ export async function findOrCreateUser(token, type, profile)
 	}
 	if (noOwner)
 	{
-		await mongoAsync.setServerConfig({ owner: user._id });
+		await setServerConfig({ owner: user._id });
 	}
   return user;
 }
