@@ -106,16 +106,18 @@
 
 .tokenHeader
 {
-    padding: 10px 20px;
-    margin: 0px auto;
-    min-height: 20px;
+    background: silver;
+    margin: 10px auto 20px auto;
+    min-height: 40px;    
     display: flex;
+    align-items: center;
     border-radius: 20px;
-    width: 100%;
+    width: 100%;    
 }
 
 .tokenBase
 {
+    margin:0 20px;
     font-weight: bold;
     flex-grow: 1;
 }
