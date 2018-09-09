@@ -166,14 +166,14 @@
     "test-watch": "yarn run test --watch --notify",
     "test-cover": "yarn run test --coverage",
     "coverage": "yarn run test-cover && opn coverage/lcov-report/index.html",
-    "clean": "babel tools/run clean",
-    "copy": "babel tools/run copy",
-    "bundle": "babel tools/run bundle",
-    "build": "babel tools/run build",
+    "clean": "babel-cli tools/run clean",
+    "copy": "babel-cli tools/run copy",
+    "bundle": "babel-cli tools/run bundle",
+    "build": "babel-cli tools/run build",
     "build-stats": "yarn run build --release --analyse",
-    "deploy": "babel tools/run deploy",
-    "render": "babel tools/run render",
-    "serve": "babel tools/run runServer",
-    "start": "babel tools/run start"
+    "deploy": "babel-cli tools/run deploy",
+    "render": "babel-cli tools/run render",
+    "serve": "babel-cli tools/run runServer",
+    "start": "babel-cli tools/run start"
   }
 }
