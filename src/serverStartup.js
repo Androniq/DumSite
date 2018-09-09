@@ -56,7 +56,7 @@ async function getDbCollections() {
       const db = client.db(dbName);
       const dbServerConfig = await getCollection(db, 'ServerConfig');
 
-      const serverConfig = await dbServerConfig.findOne();
+      var serverConfig = await dbServerConfig.findOne();
       if (!serverConfig || !serverConfig.isOperational)
       {
         await db.dropDatabase();
