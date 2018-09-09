@@ -47,7 +47,7 @@ async function getDbCollections() {
   // Connection url
   const url = MONGO_PATH;
   // Database Name
-  const dbName = 'heroku_r1s7050b';
+  const dbName = 'DumGrammarSite';
 
   mongoAsync.client = mongoClient;
 
@@ -55,8 +55,6 @@ async function getDbCollections() {
   mongoClient.connect(
     url,
     async (err, client) => {
-
-
       const db = client.db(dbName);
       const dbServerConfig = await getCollection(db, 'ServerConfig');
 
