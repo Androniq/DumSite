@@ -10,6 +10,7 @@ import { guid, quillToolbarOptions, htmlNonEmpty, checkPrivilege, USER_LEVEL_ADM
 import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import Popup from "reactjs-popup";
+import QuillWrapper from '../../components/QuillWrapper/QuillWrapper';
 
 var urlRegex = RegExp("^([A-Za-z0-9_-]*)$");
 
@@ -189,8 +190,7 @@ async onDeleteDo()
                 hint="Коротке позначення лексеми Б, яке відображатиметься на кнопках для голосування. Його потрібно писати з малої літери і без наголосів. Максимальна довжина – 16 символів. Наприклад: «правильно»." />
             </div>
             <div className={classnames(s.contentEditor, this.state.validatorContent)}>
-              <ReactQuill value={this.state.Content} modules={{toolbar: quillToolbarOptions}}
-                onChange={this.onContentChanged.bind(this)} />
+              <QuillWrapper value={this.state.Content} onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
               <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>

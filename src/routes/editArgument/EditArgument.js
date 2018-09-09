@@ -12,6 +12,7 @@ import ReactQuill from 'react-quill';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
 import Popup from "reactjs-popup";
+import QuillWrapper from '../../components/QuillWrapper/QuillWrapper';
 
 class EditArgument extends React.Component {
   static propTypes = {};
@@ -177,8 +178,7 @@ async onDeleteDo()
               </div>
             </div>
             <div className={classnames(s.contentEditor, this.state.contentValidator)}>
-              <ReactQuill value={this.state.Content} modules={{toolbar: quillToolbarOptions}}
-                onChange={this.onContentChanged.bind(this)} />
+              <QuillWrapper value={this.state.Content} onChange={this.onContentChanged.bind(this)} />
             </div>
             <div className={s.buttonsContainer}>
               <BlueButton onClick={this.onSave.bind(this)}>Зберегти</BlueButton>
