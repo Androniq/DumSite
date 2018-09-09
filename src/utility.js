@@ -77,3 +77,9 @@ export const quillToolbarOptions = [
   
 	['clean']                                         // remove formatting button
   ];
+
+  export function showSticky(component)
+  {
+	  component.setState({ stickyShown: true });
+	  setTimeout(function() { component.setState({ stickyShown: false }); }, 1000);
+  }

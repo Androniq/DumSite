@@ -15,17 +15,20 @@ import {
 	USER_LEVEL_MEMBER,
 	USER_LEVEL_MODERATOR,
 	USER_LEVEL_ADMIN,
-  USER_LEVEL_OWNER } from '../../utility';
+  USER_LEVEL_OWNER, 
+  showSticky} from '../../utility';
 import history from '../../history';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
 import Link from '../../components/Link/Link';
+import StickyMessage from '../../components/StickyMessage/StickyMessage';
 
 class Article extends React.Component {
   static propTypes = {};
 
   state = {
-    ownVote: 'N'
+    ownVote: 'N',
+    votePopupOpen: false
   };
 
   constructor(props)
@@ -104,14 +107,31 @@ clickVote(code)
   return async () => this.clickVoteDo(code, optionId);
 }
 
+onVotePopupOpen()
+{
+  this.setState({ votePopupOpen: true });
+}
+
+onVotePopupClose()
+{
+  this.setState({ votePopupOpen: false });
+}
+
 async clickVoteDo(code, optionId)
 {
   var resp = await fetch(`/api/sendPopularVote/${this.props.data.article.ID}/${optionId}`);
   var message = await resp.json();
   if (message.success)
   {
-    await this.setState({ ownVote: code });
+    await this.setState({ ownVote: code, votePopupOpen: false });
+    showSticky(this);
+    //setTimeout(this.removeVoteMessage.bind(this), 2000);
   }
+}
+
+removeVoteMessage()
+{
+  this.setState({ stickyShown: false });
 }
 
 voteButton(code, buttonStyle, colorStyle)
@@ -135,6 +155,7 @@ clickArgument()
 
   render() {
     return (
+      <>
       <div className={s.infoArea}>
         <div className={s.tokenHeader}
           style={{backgroundColor: this.props.data.result.ColorCode, color: this.props.data.result.WhiteText ? "white" : "black"}}>
@@ -148,7 +169,8 @@ clickArgument()
         <UserContext.Consumer>
           {context => context.user ? context.user.confirmed ? !context.user.blocked ? (
             <div className={s.buttonContainer}>
-              <Popup trigger={<BlueButton>Голосувати!</BlueButton>} position="top center" modal>
+              <Popup trigger={<BlueButton>Голосувати!</BlueButton>} position="top center"
+                open={this.state.votePopupOpen} onOpen={this.onVotePopupOpen.bind(this)} onClosed={this.onVotePopupClose.bind(this)} modal>
                 <div className={s.pvContainer}>
                   {this.voteButton('A', s.pvButtonA, s.pvButtonRed)}
                   {this.voteButton('AB', s.pvButtonAB, s.pvButtonYellow)}
@@ -218,6 +240,8 @@ clickArgument()
           )}
         </UserContext.Consumer>
       </div>
+      <StickyMessage message="Ваш голос враховано!" visible={this.state.stickyShown} />
+      </>
     );
   }
 }
