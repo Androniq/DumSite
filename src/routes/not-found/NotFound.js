@@ -22,7 +22,7 @@ class NotFound extends React.Component {
       <div className={s.root}>
         <div className={s.container}>
           <h1>{this.props.title}</h1>
-          <p>Гой! Думаву, йсе Закарпаттє. Ту шо інтернету не є, шо літературної української мови.</p>
+          <p>Гой! Думаву, йсе Закарпаттє. Туй шо інтернету не є, шо літературної української мови.</p>
         </div>
       </div>
     );

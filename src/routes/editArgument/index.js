@@ -11,13 +11,24 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import EditArgument from './EditArgument';
+import { checkPrivilege, USER_LEVEL_MEMBER } from '../../utility';
+import NotFound from '../not-found/NotFound';
 
-async function action({ fetch }, params) {
+async function action({ fetch, user }, params) {
+  if (!checkPrivilege(user, USER_LEVEL_MEMBER))
+  {
+    return {
+      title: '403 Дія заборонена',
+      component: <ErrorPage name="403 Дія заборонена" message="Ви не маєте дозволу на дію, яку намагалися зробити" stack="-" />
+    };
+  }
     var argumentId = params[0];
     if (!argumentId)
     {
-      // redirect 404
-      return null;
+      return {
+        title: '404 Сторінку не знайдено',
+        component: <NotFound />
+      };
     }
     var isNew = argumentId === 'new';
     var fetchApi = isNew ? `/api/getNewArgument/${params[1]}` : `/api/getArgument/${argumentId}`;
