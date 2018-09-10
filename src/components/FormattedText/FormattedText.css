@@ -4,7 +4,7 @@
     text-align: justify;
 }
 
-.outerSpan > p
+.outerSpan * p
 {
     text-indent: 50px;
 }
