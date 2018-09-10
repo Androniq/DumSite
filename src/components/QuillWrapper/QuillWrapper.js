@@ -8,7 +8,13 @@ export default class QuillWrapper extends Component
     super(props);
     if (typeof document !== 'undefined')
     {
+      console.info("POCHAV");
       this.quill = require('react-quill');
+    }
+    else
+    {
+      console.info("NE POCHAV");
+      this.quill = null;
     }
   }
 

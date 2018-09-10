@@ -50,6 +50,7 @@ import setArgument from './serverLogic/setArgument';
 import checkArticleUrl from './serverLogic/checkArticleUrl';
 import deleteArgument from './serverLogic/deleteArgument';
 import deleteArticle from './serverLogic/deleteArticle';
+import getAccount from './serverLogic/getAccount';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -333,6 +334,13 @@ app.get('/api/sendPopularVote/:articleId/:voteId', async (req, res) => {
   const result = await sendPopularVote(getUser(req), req.params.articleId, req.params.voteId);
   res.send(result);
 });
+
+app.get('/api/getAccount', async (req, res) => {
+  await serverReady();
+  const result = await getAccount(getUser(req));
+  res.send(result);
+
+})
 
 app.get('/api/getBlog/:blogUrl', async (req, res) => {
   await serverReady();

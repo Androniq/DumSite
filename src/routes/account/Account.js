@@ -15,8 +15,8 @@ import {
 	USER_LEVEL_MEMBER,
 	USER_LEVEL_MODERATOR,
 	USER_LEVEL_ADMIN,
-  USER_LEVEL_OWNER, 
-  showSticky} from '../../utility';
+    USER_LEVEL_OWNER, 
+    showSticky} from '../../utility';
 import history from '../../history';
 import BlueButton from '../../components/BlueButton/BlueButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
@@ -33,11 +33,37 @@ class Account extends React.Component {
     super(props);
   }
 
+  userRolePanel(role)
+  {
+    switch (role)
+    {
+        case 'member': return (
+            <span>Учасник</span>
+        );
+        case 'moderator': return (
+            <span>Модератор</span>
+        );
+        case 'admin': return (
+            <span>Адміністратор</span>
+        );
+        case 'owner': return (
+            <span>Власник сайту</span>
+        );
+    }
+    return null;
+  }
+
   render()
   {
-      return
-      <div/>
-      ;
+      return (
+        <div className={s.container}>
+            <img className={s.userpic} src={this.props.data.photo} />
+            <div className={s.userCard}>
+            <span className={s.displayName}>{this.props.data.displayName}</span>
+            {this.userRolePanel(this.props.data.role)}
+            </div>
+        </div>
+      );
   }
 }
 

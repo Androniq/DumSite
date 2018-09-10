@@ -15,18 +15,18 @@ import { checkPrivilege, USER_LEVEL_MEMBER } from '../../utility';
 import ErrorPage from '../error/ErrorPage';
 
 async function action({ fetch, user }) {
-  if (!checkPrivilege(user, USER_LEVEL_MEMBER))
+ /* if (!checkPrivilege(user, USER_LEVEL_MEMBER))
   {
     return {
       title: '403 Дія заборонена',
       component: <ErrorPage name="403 Дія заборонена" message="Ви не маєте дозволу на дію, яку намагалися зробити" stack="-" />
     };
-  }
+  }*/
   const accountResp = await fetch(`/api/getAccount`, { method: 'GET' });
-  account = await accountResp.json();
+  var account = await accountResp.json();
   return {
     chunks: ['account'],
-    title: user.displayName,
+    title: account.displayName,
     component: (
       <Layout>
         <Account data={account} fetch={fetch} />

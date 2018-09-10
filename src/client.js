@@ -87,7 +87,7 @@ async function onLocationChange(location, action) {
     }
     catch(error)
     {
-      console.error(error)
+      console.error(error);
     }
     
     context.user = user;
