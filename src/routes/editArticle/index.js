@@ -11,8 +11,17 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import EditArticle from './EditArticle';
+import { checkPrivilege, USER_LEVEL_MODERATOR } from '../../utility';
+import ErrorPage from '../error/ErrorPage';
 
-async function action({ fetch }, params) {
+async function action({ fetch, user }, params) {
+  if (!checkPrivilege(user, USER_LEVEL_MODERATOR))
+  {
+    return {
+      title: '403 Дія заборонена',
+      component: <ErrorPage name="403 Дія заборонена" message="Ви не маєте дозволу на дію, яку намагалися зробити" stack="-" />
+    };
+  }
     var articleId = params[0];
     let article = null;
     if (articleId && articleId !== 'new')
