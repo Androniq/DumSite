@@ -84,6 +84,13 @@ export const quillToolbarOptions = [
 	  {
 		throw { message: "No component given to showSticky method. Usage: showSticky(this)." };
 	  }
-	  component.setState({ stickyShown: true });
-	  setTimeout(function() { component.setState({ stickyShown: false }); }, 1000);
+	  component.setState({ stickyShown: 2 });
+	  setTimeout(async function()
+	  {
+		  await component.setState({ stickyShown: 1 });
+		  setTimeout(
+			function() { component.setState({ stickyShown: 0 }); },
+			2000
+		  );
+	  }, 1000);
   }

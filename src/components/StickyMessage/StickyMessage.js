@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 class StickyMessage extends React.Component {
     static propTypes = {
         message: PropTypes.string,
-        visible: PropTypes.bool
+        visible: PropTypes.number
     };
 
     state = { visibilityStyle: s.invisible };
@@ -19,7 +19,7 @@ class StickyMessage extends React.Component {
 
   render() {
     return (
-        <div className={cx(s.sticky, this.props.visible ? s.visible : s.invisible)}>
+        <div className={cx(s.sticky, this.props.visible ? this.props.visible === 2 ? s.visible : s.invisible : s.nodisplay)}>
             <span className={s.stickyMessage}>{this.props.message}</span>
         </div>
     );

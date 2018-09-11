@@ -19,6 +19,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className={s.root} role="navigation">
+        <div className={s.linkPanel}>
         <Link className={s.link} to="/">
           Домівка
         </Link>
@@ -32,21 +33,29 @@ class Navigation extends React.Component {
           ЗУНПА
         </Link>
         <UserContext.Consumer>
-          {context => context.user ? (
-            <>
-            {checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
+          {context => checkPrivilege(context.user, USER_LEVEL_MODERATOR) ? (
               <Link className={s.link} to="/editArticle/new">
                 Написати статтю
               </Link>
             ) : ""}
-              <span className={s.spacer}> | </span>
+        </UserContext.Consumer>
+        </div>
+        <span className={s.spacer}> | </span>
+        <div className={s.userPanel}>
+        <UserContext.Consumer>
+          {context => context.user ? (
+            <>
               <Link className={s.link} to="/account">
                 <img src={context.user.photo} className={s.profilePicture} />
-                <span>{context.user.displayName}</span>
               </Link>
-              <a className={s.link} href="/logout">
-                Вийти
-              </a>
+              <div className={s.verticalPanel}>
+                <Link className={s.link} to="/account">
+                  <span>{context.user.displayName}</span>
+                </Link>
+                <a className={cx(s.link, s.logoutLink)} href="/logout">
+                  Вийти
+                </a>
+              </div>
             </>
           ) : (
             <>
@@ -61,6 +70,7 @@ class Navigation extends React.Component {
             </>
           )}
         </UserContext.Consumer>
+        </div>
       </div>
     );
   }

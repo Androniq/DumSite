@@ -10,10 +10,23 @@
 .root {
   float: right;
   margin: 6px 0 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.linkPanel
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .link {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 3px 8px;
   text-decoration: none;
   font-size: 1.125em; /* ~18px */
@@ -45,6 +58,13 @@
   color: rgba(128, 128, 128, 1);
 }
 
+.userPanel
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .profilePicture
 {
   object-fit: cover;
@@ -52,4 +72,16 @@
   width: 32px;
   height: 32px;
   margin: 0px 10px 0px 0px;
+}
+
+.verticalPanel
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.logoutLink
+{
+  
 }

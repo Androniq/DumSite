@@ -30,18 +30,17 @@ class Header extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <Navigation />
           <Link className={s.brand} to="/">
             <img
               src={logo}
               srcSet={`${logoUrl2x} 2x`}
               width="38"
               height="38"
-              alt="React"
+              alt="ДУМ"
             />
             <span className={s.brandTxt}>ДУМ</span>
           </Link>
-          <div className={s.banner} />
+          <Navigation className={s.navigation} />
         </div>
       </div>
     );
