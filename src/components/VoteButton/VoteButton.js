@@ -4,6 +4,7 @@ import Popup from "reactjs-popup";
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './VoteButton.css';
 import classnames from 'classnames';
+import FormattedText from '../FormattedText/FormattedText';
 
 class VoteButton extends React.Component
 {
@@ -11,7 +12,8 @@ class VoteButton extends React.Component
     {
         code: PropTypes.string.isRequired,
         onClick: PropTypes.func,
-        ownVote: PropTypes.string.isRequired
+        ownVote: PropTypes.string.isRequired,
+        hint: PropTypes.string
     };
     
     state =
@@ -66,13 +68,36 @@ class VoteButton extends React.Component
         return null;
     }
 
+    getPopupPosition(code)
+	{
+		switch (code)
+		{
+			case 'A':
+			case 'AB':
+				return "top center";
+			case 'BA':
+			case 'B':
+				return "bottom center";
+			case 'EQ':
+				return "right center";
+			case 'S':
+				return "left center";
+		}
+	}
+
     render()
     {
         return (
-            <button className={classnames(s.pvButtonBase, this.state.colorStyle, this.state.buttonStyle, this.cssHighlight(this.props.code))}
-                onClick={this.props.onClick}>
-                {this.props.children}
-            </button>
+            <Popup on="hover" contentStyle={{"width":"400px","borderRadius":"5px","textAlign":"left"}}
+                position={this.getPopupPosition(this.props.code)}
+                trigger={(
+                <button className={classnames(s.pvButtonBase, this.state.colorStyle, this.state.buttonStyle, this.cssHighlight(this.props.code))}
+                    onClick={this.props.onClick}>
+                    {this.props.children}
+                </button>
+                )}>
+                <FormattedText html={this.props.hint} />
+            </Popup>
             );
     }
 }

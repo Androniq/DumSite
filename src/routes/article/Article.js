@@ -123,9 +123,11 @@ async clickVoteDo(code, optionId)
 
 voteButton(code)
 {
+  var opt = this.getVoteOption(code);
+  var hint = opt.vote.HintTemplate.replace('%A%', this.props.data.article.ShortA).replace('%B%', this.props.data.article.ShortB);
   return (
-    <VoteButton code={code} ownVote={this.state.ownVote} onClick={this.clickVote(code)}>
-      {this.getVoteOption(code).vote.ShortestDescription}
+    <VoteButton code={code} ownVote={this.state.ownVote} onClick={this.clickVote(code)} hint={hint}>
+      {opt.vote.ShortestDescription}
     </VoteButton>
   );
 }
