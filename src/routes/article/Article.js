@@ -19,6 +19,7 @@ import {
   showSticky} from '../../utility';
 import history from '../../history';
 import BlueButton from '../../components/BlueButton/BlueButton';
+import VoteButton from '../../components/VoteButton/VoteButton';
 import FormattedText from '../../components/FormattedText/FormattedText';
 import Link from '../../components/Link/Link';
 import StickyMessage from '../../components/StickyMessage/StickyMessage';
@@ -87,13 +88,14 @@ getVoteOption(code)
   return this.props.data.voteResults.find(function(element) { return element.vote.Code === code; });
 }
 
-cssHighlight(code)
+onVotePopupOpen()
 {
-  if (code === this.state.ownVote)
-  {
-    return s.pvButtonCurrent;
-  }
-  return null;
+  this.setState({ votePopupOpen: true });
+}
+
+onVotePopupClose()
+{
+  this.setState({ votePopupOpen: false });
 }
 
 clickVote(code)
@@ -105,16 +107,6 @@ clickVote(code)
     code = 'N';
   }
   return async () => this.clickVoteDo(code, optionId);
-}
-
-onVotePopupOpen()
-{
-  this.setState({ votePopupOpen: true });
-}
-
-onVotePopupClose()
-{
-  this.setState({ votePopupOpen: false });
 }
 
 async clickVoteDo(code, optionId)
@@ -129,12 +121,12 @@ async clickVoteDo(code, optionId)
   }
 }
 
-voteButton(code, buttonStyle, colorStyle)
+voteButton(code)
 {
   return (
-    <button className={classnames(s.pvButtonBase, colorStyle, buttonStyle, this.cssHighlight(code))} onClick={this.clickVote(code)}>
+    <VoteButton code={code} ownVote={this.state.ownVote} onClick={this.clickVote(code)}>
       {this.getVoteOption(code).vote.ShortestDescription}
-    </button>
+    </VoteButton>
   );
 }
 
@@ -177,12 +169,12 @@ async componentDidMount()
               <Popup trigger={<BlueButton>Голосувати!</BlueButton>} position="top center"
                 open={this.state.votePopupOpen} onOpen={this.onVotePopupOpen.bind(this)} onClosed={this.onVotePopupClose.bind(this)} modal>
                 <div className={s.pvContainer}>
-                  {this.voteButton('A', s.pvButtonA, s.pvButtonRed)}
-                  {this.voteButton('AB', s.pvButtonAB, s.pvButtonYellow)}
-                  {this.voteButton('S', s.pvButtonS, s.pvButtonBlue)}
-                  {this.voteButton('EQ', s.pvButtonEQ, s.pvButtonGreen)}
-                  {this.voteButton('B', s.pvButtonB, s.pvButtonRed)}
-                  {this.voteButton('BA', s.pvButtonBA, s.pvButtonYellow)}
+                  {this.voteButton('A')}
+                  {this.voteButton('AB')}
+                  {this.voteButton('EQ')}
+                  {this.voteButton('BA')}
+                  {this.voteButton('B')}
+                  {this.voteButton('S')}
                 </div>
               </Popup>              
               <BlueButton onClick={this.clickArgument.bind(this)}>Аргументувати...</BlueButton>

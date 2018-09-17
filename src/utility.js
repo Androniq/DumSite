@@ -78,17 +78,22 @@ export const quillToolbarOptions = [
 	['clean']                                         // remove formatting button
   ];
 
+  var currentStickyTimeout;
+  var currentStickyTimeoutInner;
+
   export function showSticky(component)
   {
 	  if (!component)
 	  {
 		throw { message: "No component given to showSticky method. Usage: showSticky(this)." };
 	  }
+	  if (currentStickyTimeout) { clearTimeout(currentStickyTimeout); }
+	  if (currentStickyTimeoutInner) { clearTimeout(currentStickyTimeoutInner); }
 	  component.setState({ stickyShown: 2 });
-	  setTimeout(async function()
+	  currentStickyTimeout = setTimeout(async function()
 	  {
 		  await component.setState({ stickyShown: 1 });
-		  setTimeout(
+		  currentStickyTimeoutInner = setTimeout(
 			function() { component.setState({ stickyShown: 0 }); },
 			2000
 		  );
