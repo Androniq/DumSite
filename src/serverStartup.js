@@ -41,7 +41,7 @@ async function getCollection(db, name) {
 }
 
 async function getDbCollections() {
-  const test = require('assert');
+  require('dotenv').config();
   // Connection url
   const url = 'mongodb://localhost:27017';
   // Database Name
