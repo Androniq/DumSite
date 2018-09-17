@@ -52,7 +52,7 @@ class Navigation extends React.Component {
                 <Link className={s.link} to="/account">
                   <span>{context.user.displayName}</span>
                 </Link>
-                <a className={cx(s.link, s.logoutLink)} href="/logout">
+                <a className={cx(s.link, s.logoutLink)} href={"/logout?returnTo=" + context.pathname}>
                   Вийти
                 </a>
               </div>
@@ -60,7 +60,7 @@ class Navigation extends React.Component {
           ) : (
             <>
               <span className={s.spacer}> | </span>
-              <Link className={s.link} to="/login">
+              <Link className={s.link} to={{pathname: "/login", state: { returnTo: context.pathname }}}>
                 Увійти
               </Link>
               <span className={s.spacer}>чи</span>

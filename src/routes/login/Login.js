@@ -11,14 +11,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Login.css';
+import { UserContext } from '../../UserContext';
 
 class Login extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
   };
 
+  getReturnTo(context)
+  {
+    return (context && context.location && context.location.state && context.location.state.returnTo) || "/";
+  }
+
   render() {
     return (
+      <UserContext.Consumer>
+        {context => (
       <div className={s.root}>
         <div className={s.container}>
           <h1>{this.props.title}</h1>
@@ -40,7 +48,7 @@ class Login extends React.Component {
             </a>
           </div>
           <div className={s.formGroup}>
-            <a className={s.google} href="/login/google">
+            <a className={s.google} href={"/login/google?returnTo=" + this.getReturnTo(context)}>
               <svg
                 className={s.icon}
                 width="30"
@@ -121,6 +129,8 @@ class Login extends React.Component {
           </form>
         </div>
       </div>
+        )}
+      </UserContext.Consumer>
     );
   }
 }

@@ -21,7 +21,6 @@ function isModifiedEvent(event) {
 
 class Link extends React.Component {
   static propTypes = {
-    to: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
     onClick: PropTypes.func,
   };
@@ -50,7 +49,7 @@ class Link extends React.Component {
   render() {
     const { to, children, ...props } = this.props;
     return (
-      <a href={to} {...props} onClick={this.handleClick}>
+      <a href={to.pathname || to} {...props} onClick={this.handleClick}>
         {children}
       </a>
     );

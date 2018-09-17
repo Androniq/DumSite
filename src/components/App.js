@@ -19,6 +19,8 @@ const ContextType = {
   pathname: PropTypes.string.isRequired,
   query: PropTypes.object,
   user: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object
 };
 
 /**

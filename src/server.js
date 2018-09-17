@@ -192,6 +192,11 @@ passport.use(
 
 app.get(
   '/login/google',
+  (req, res, next) =>
+  {
+    req.session.returnTo = req.query.returnTo;
+    next();
+  },
   passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.me', 'https://www.googleapis.com/auth/userinfo.email'],
     session: true,
@@ -210,6 +215,7 @@ app.get(
     const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
     res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
     res.redirect(req.session.returnTo || '/');
+    req.session.returnTo = null;
   },
 );
 
@@ -259,7 +265,7 @@ app.get('/logout',
   (req, res) =>
   {
       req.session.passport = null;
-      res.redirect(req.session.returnTo || '/');
+      res.redirect(req.query.returnTo || '/');
   }  
 )
 
@@ -414,14 +420,11 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-    if (req.url !== '/json')
-    {
-      req.session.returnTo = req.url;
-    }
-
+    context.location = { state: { returnTo: req.session.ssrLastUrl || "/" }};
+    if (req.path != "/json") { req.session.ssrLastUrl = req.path; }
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <UserContext.Provider value={{ user: context.user }}><App context={context}>{route.component}</App></UserContext.Provider>,
+      <UserContext.Provider value={context}><App context={context}>{route.component}</App></UserContext.Provider>,
     );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
 
@@ -444,10 +447,6 @@ app.get('*', async (req, res, next) => {
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
-    if (req.url !== '/json')
-    {
-      req.session.returnTo = req.url;
-    }
     res.send(`<!doctype html>${html}`);
   } catch (err) {
     next(err);
