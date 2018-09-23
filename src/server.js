@@ -2,9 +2,11 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import passport from 'passport';
+import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
