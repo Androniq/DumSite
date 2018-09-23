@@ -23,6 +23,6 @@
     "eject": "react-scripts eject",
     "server": "nodemon --experimental-modules src/server.mjs",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn start\"",
-    "deploy": "yarn build"
+    "deploy": "yarn build && serve -s build"
   }
 }
