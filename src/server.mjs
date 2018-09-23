@@ -1,5 +1,4 @@
 import express from 'express';
-import Html from './components/Html/Html';
 
 const app = express();
 const port = process.env.PORT || 5000;
