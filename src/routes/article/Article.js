@@ -154,7 +154,7 @@ async componentDidMount()
 
   render() {
     return (
-      <>
+      <React.Fragment>
       <div className={s.infoArea}>
         <div className={s.tokenHeader}
           style={{backgroundColor: this.props.data.result.ColorCode, color: this.props.data.result.WhiteText ? "white" : "black"}}>
@@ -240,7 +240,7 @@ async componentDidMount()
         </UserContext.Consumer>
       </div>
       <StickyMessage message={this.state.stickyText} visible={this.state.stickyShown} />
-      </>
+      </React.Fragment>
     );
   }
 }

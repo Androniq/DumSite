@@ -51,6 +51,7 @@ import checkArticleUrl from './serverLogic/checkArticleUrl';
 import deleteArgument from './serverLogic/deleteArgument';
 import deleteArticle from './serverLogic/deleteArticle';
 import getAccount from './serverLogic/getAccount';
+import assert from 'assert';
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);

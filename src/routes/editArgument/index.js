@@ -13,6 +13,7 @@ import Layout from '../../components/Layout';
 import EditArgument from './EditArgument';
 import { checkPrivilege, USER_LEVEL_MEMBER } from '../../utility';
 import NotFound from '../not-found/NotFound';
+import ErrorPage from '../error/ErrorPage';
 
 async function action({ fetch, user }, params) {
   if (!checkPrivilege(user, USER_LEVEL_MEMBER))

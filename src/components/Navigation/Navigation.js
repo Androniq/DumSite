@@ -44,7 +44,7 @@ class Navigation extends React.Component {
         <div className={s.userPanel}>
         <UserContext.Consumer>
           {context => context.user ? (
-            <>
+            <React.Fragment>
               <Link className={s.link} to="/account">
                 <img src={context.user.photo} className={s.profilePicture} />
               </Link>
@@ -56,9 +56,9 @@ class Navigation extends React.Component {
                   Вийти
                 </a>
               </div>
-            </>
+            </React.Fragment>
           ) : (
-            <>
+            <React.Fragment>
               <span className={s.spacer}> | </span>
               <Link className={s.link} to={{pathname: "/login", state: { returnTo: context.pathname }}}>
                 Увійти
@@ -67,7 +67,7 @@ class Navigation extends React.Component {
               <Link className={cx(s.link, s.highlight)} to="/register">
                 Зареєструватися
               </Link>
-            </>
+            </React.Fragment>
           )}
         </UserContext.Consumer>
         </div>
