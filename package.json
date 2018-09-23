@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "concurrently": "^4.0.1",
+    "esm": "^3.0.84",
     "serve": "^10.0.1"
   },
   "engines": {
