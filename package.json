@@ -16,6 +16,9 @@
     "concurrently": "^4.0.1",
     "serve": "^10.0.1"
   },
+  "engines": {
+    "node": "8.11.4"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
