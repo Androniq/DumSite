@@ -27,6 +27,6 @@
     "server": "node --experimental-modules src/server.mjs",
     "server-dev": "nodemon --experimental-modules src/server.mjs",
     "dev": "concurrently --kill-others-on-fail \"yarn server-dev\" \"yarn start\"",
-    "deploy": "yarn global add serve && serve -s build"
+    "deploy": "node --experimental-modules src/server.mjs"
   }
 }
