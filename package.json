@@ -17,6 +17,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
+    "webpack": "^4.19.1",
     "xregexp": "^4.2.0"
   },
   "devDependencies": {
@@ -34,6 +35,6 @@
     "server": "node -r esm src/server.js",
     "server-dev": "nodemon -r esm src/server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server-dev\" \"yarn start\"",
-    "deploy": "node -r esm src/server.js"
+    "deploy": "webpack -d | node -r esm src/server.js"
   }
 }
