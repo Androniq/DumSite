@@ -9,12 +9,15 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.get('*', async (req, res, next) =>
-{
+{/*
     const data = {};
     data.children = ReactDOM.renderToString(<App />);
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(200);
-    res.send(`<!doctype html>${html}`);
+    res.send(`<!doctype html>${html}`);*/
+    res.status(200);
+    res.send(`<!doctype html><html><head><title>Ну прівєт, безграмотщина безреактова</title></head><body><h3>Позорище.</h3></body></html>`);
+
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
