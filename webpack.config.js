@@ -127,12 +127,6 @@ module.exports =
     target: "web", // enum  // the environment in which the bundle should run
     // changes chunk loading behavior and available modules
     externals: ["react", /^@angular\//],  // Don't follow/bundle these modules, but request them at runtime from the environment
-    serve:
-    { //object
-        port: 1337,
-        content: './dist',
-        // ...
-    },
     // lets you provide options for webpack-serve
     stats: "errors-only",  // lets you precisely control what bundle information gets displayed
     devServer:
