@@ -42,7 +42,7 @@ module.exports =
                 // - Use RegExp only in test and for filename matching
                 // - Use arrays of absolute paths in include and exclude
                 // - Try to avoid exclude and prefer include
-                issuer: { test, include, exclude },
+                issuer: { test: 'test', include: 'include', exclude: 'exclude' },
                 // conditions for the issuer (the origin of the import)
                 enforce: "pre",
                 enforce: "post",
