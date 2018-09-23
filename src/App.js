@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router';
 import './App.css';
+import Home from './routes/Home/Home';
+import Article from './routes/Article/Article';
+import Layout from './components/Layout/Layout';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">На цьому місці буде зведено сайт, присвячений українській мові.</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+class App extends Component
+{
+    render()
+    {
+      return (
+        <BrowserRouter>
+          <Layout>
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <Route path="/article" component={Article} />
+            </Switch>
+          </Layout>
+        </BrowserRouter>
     );
   }
 }
