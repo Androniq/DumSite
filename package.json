@@ -29,9 +29,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server": "node --experimental-modules src/server.mjs",
-    "server-dev": "nodemon --experimental-modules src/server.mjs",
+    "server": "node -r esm src/server.js",
+    "server-dev": "nodemon -r esm src/server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server-dev\" \"yarn start\"",
-    "deploy": "node --experimental-modules src/server.mjs"
+    "deploy": "node -r esm src/server.js"
   }
 }
