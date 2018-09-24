@@ -16,9 +16,17 @@ export function withEverything(Component, fetchApi)
                 var fetchReq = await fetch(fetchApiSubstitute);
                 var fetchJson = await fetchReq.json();
                 props.data = fetchJson;
-                // almost there - need only to pass this new extended props to the Component
-                // HOC?
-                return Component;
+                return (WrappedComponent =>
+                {
+                    class Hoc extends React.Component
+                    {
+                        render()
+                        {
+                            return <WrappedComponent {...props} />;
+                        }
+                    }
+                    return Hoc;
+                })(Component);
             }
         });
         return <AsyncComponent {...props} />;
