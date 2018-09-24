@@ -18,7 +18,7 @@
   "scripts": {
     "globals": "yarn global add esm react-scripts",
     "build": "cd client && yarn build && cd ..",
-    "start": "node -r esm ./client/index.js",
-    "deploy": "yarn globals && yarn build && yarn start"
+    "start": "node ./client/index.js",
+    "deploy": "yarn start"
   }
 }
