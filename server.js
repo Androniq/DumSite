@@ -9,18 +9,14 @@ app.get('/api/users', (req, res) =>
     res.send({message:"I am that second code3"});
 });
 
-//if (process.env.NODE_ENV === 'production')
-{
-  app.get('*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build/index.html'));
-  });
-}
-//else
-{
+});
 
-}
+const defaultPort = process.env.NODE_ENV === 'production' ? 3000 : 3001;
+// if not in production, we should be able to run server and client on different ports simultaneously (and use proxy on client to redirect API calls).
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || defaultPort;
 
 app.listen(port);
 console.log('Listening on port ' + port);
