@@ -20,13 +20,12 @@
   "devDependencies": {},
   "proxy": "http://localhost:3001",
   "scripts": {
-    "start-dev": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "yarn build",
-    "start": "node -r esm ./server.js",
-    "deploy": "yarn start",
-    "dev": "SET DEVMODE=1 && concurrently \"nodemon -r esm ./server.js\" \"yarn start-dev\""
+    "deploy": "node -r esm ./server.js",
+    "dev": "SET DEVMODE=1 && concurrently \"nodemon -r esm ./server.js\" \"yarn start\""
   }
 }

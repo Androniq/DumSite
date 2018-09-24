@@ -7,9 +7,9 @@ class App extends Component {
 	
 	async componentDidMount()
 	{
-    var res = await fetch('/api/users');
+    var res = await fetch('/api/hello');
     var json = await res.json();
-    this.setState({ users: json.toString() });
+    this.setState({ resp: json.toString() });
     console.info(json);    
 	}
 	
@@ -18,12 +18,12 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">React-Express for Heroku boilerplate</h1>
         </header>
         <p className="App-intro">
-          <button>Freaking button!</button>
-			    <span>Users=</span>
-			    <span>{this.state.users}</span>
+          <button>Get some data from server</button>
+			    <span>Response=</span>
+			    <span>{this.state.resp}</span>
         </p>
       </div>
     );

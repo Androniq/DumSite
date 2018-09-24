@@ -4,9 +4,9 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/api/users', (req, res) =>
+app.get('/api/hello', (req, res) =>
 {
-    res.send({message:"I am that second code3"});
+    res.send("Message from the server!");
 });
 
 app.get('*', (req, res) => {
