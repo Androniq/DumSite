@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import { StaticRouter } from 'react-router';
 
 // import our main App component
 import App from '../src/App';
@@ -9,6 +10,12 @@ const fs = require("fs");
 
 export default (req, res, next) =>
 {
+    const context = 
+    {
+        path: req.path,
+        query: req.query
+    }
+
     // point to the html file created by CRA's build tool
     const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
 
@@ -21,7 +28,7 @@ export default (req, res, next) =>
         }
 
         // render the app as a string
-        const html = ReactDOMServer.renderToString(<App />);
+        const html = ReactDOMServer.renderToString(<StaticRouter context={context}><App /></StaticRouter>);
 
         // inject the rendered app into our html and send it
         return res.send(

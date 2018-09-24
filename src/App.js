@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Home from './routes/Home/Home';
 import About from './routes/About/About';
@@ -10,7 +10,6 @@ import Error from './routes/Error/Error';
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
         <Layout>
           <Switch>
             <Route path='/' exact component={Home} />
@@ -19,7 +18,6 @@ class App extends Component {
             <Route component={Error} />
           </Switch>
         </Layout>
-      </BrowserRouter>
     );
   }
 }

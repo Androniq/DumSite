@@ -3,6 +3,7 @@ import path from 'path';
 import serverRenderer from './serverTools/renderer';
 
 const app = express();
+
 const router = express.Router();
 
 // root (/) should always serve our server rendered page
@@ -29,9 +30,7 @@ app.get('/api/article/:id', (req, res) =>
     res.send({ message: `Text of article #${req.params.id}.` });
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build/index.html'));
-});
+app.get('*', serverRenderer);
 
 const defaultPort = process.env.DEVMODE ? 3001 : 3000;
 // if not in production, we should be able to run server and client on different ports simultaneously (and use proxy on client to redirect API calls).
