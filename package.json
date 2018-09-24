@@ -11,6 +11,6 @@
     "morgan": "~1.9.0"
   },
   "scripts": {
-    "start": "yarn global add concurrently && concurrently \"node ./bin/www\" \"cd client && yarn start\""
+    "start": "yarn global add concurrently && concurrently \"node ./bin/www\" \"cd client && yarn install && yarn start\""
   }
 }
