@@ -16,9 +16,9 @@
     "esm": "^3.0.84"
   },
   "scripts": {
-    "global": "yarn global add concurrently esm",
+    "globals": "yarn global add concurrently esm",
     "build": "cd client && yarn build && cd ..",
     "start": "node -r esm ./client/index.js",
-    "deploy": "yarn global && yarn build && yarn start"
+    "deploy": "globals && build && start"
   }
 }
