@@ -1,9 +1,21 @@
-import express, { Router } from 'express';
-import { join } from 'path';
-const app = express();
-const router = Router();
+import express from 'express';
+import path from 'path';
+import serverRenderer from './serverTools/renderer';
 
-app.use(express.static(join(__dirname, 'build')));
+const app = express();
+const router = express.Router();
+
+// root (/) should always serve our server rendered page
+router.use('^/$', serverRenderer);
+
+// other static resources should just be served as they are
+router.use(express.static(
+    path.resolve(__dirname, 'build'),
+    { maxAge: '30d' },
+));
+
+// tell the app to use the above rules
+app.use(router);
 
 var counter = 1;
 
@@ -18,7 +30,7 @@ app.get('/api/article/:id', (req, res) =>
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(join(__dirname, 'build/index.html'));
+    res.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
 const defaultPort = process.env.DEVMODE ? 3001 : 3000;
@@ -26,5 +38,12 @@ const defaultPort = process.env.DEVMODE ? 3001 : 3000;
 
 const port = process.env.PORT || defaultPort;
 
-app.listen(port);
-console.log('Listening on port ' + port);
+app.listen(port, (error) =>
+{
+    if (error)
+    {
+        console.error('Error on trying to listen to port ' + port, error);
+        return;
+    }
+    console.log("Listening on port " + port + "...");
+});
