@@ -20,7 +20,7 @@
   "devDependencies": {},
   "scripts": {
     "build": "cd client && yarn build && cd ..",
-    "heroku-postbuild": "yarn build",
+    "heroku-postbuild": "rmdir client/build && yarn build",
     "start": "node -r esm ./server.js",
     "deploy": "yarn start",
     "dev": "concurrently \"nodemon -r esm ./server.js\" \"cd client && yarn start\""
