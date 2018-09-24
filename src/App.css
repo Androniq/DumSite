@@ -26,3 +26,16 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.App-navpanel
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.App-link
+{
+  flex: 1;
+  background: white;
+  margin: 1px;
+}
