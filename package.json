@@ -3,12 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react-app": "^3.1.2",
     "concurrently": "^4.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^6.0.0",
     "esm": "^3.0.84",
     "express": "~4.16.0",
+    "fs": "^0.0.1-security",
     "http-errors": "~1.6.2",
+    "ignore-styles": "^5.0.1",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "nodemon": "^1.18.4",
@@ -28,7 +33,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "yarn build",
-    "deploy": "node -r esm ./server.js",
-    "dev": "SET DEVMODE=1 && concurrently \"nodemon -r esm ./server.js\" \"yarn start\""
+    "deploy": "node -r esm ./serverTools/bootstrap.js",
+    "dev": "SET DEVMODE=1 && concurrently \"nodemon -r esm ./serverTools/bootstrap.js\" \"yarn start\""
   }
 }

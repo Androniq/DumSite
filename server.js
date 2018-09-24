@@ -1,8 +1,9 @@
-const express = require('express');
-const path = require('path');
+import express, { Router } from 'express';
+import { join } from 'path';
 const app = express();
+const router = Router();
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(join(__dirname, 'build')));
 
 var counter = 1;
 
@@ -17,7 +18,7 @@ app.get('/api/article/:id', (req, res) =>
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build/index.html'));
+    res.sendFile(join(__dirname, 'build/index.html'));
 });
 
 const defaultPort = process.env.DEVMODE ? 3001 : 3000;
