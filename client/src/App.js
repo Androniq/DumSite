@@ -7,7 +7,11 @@ class App extends Component {
 	
 	componentDidMount()
 	{
-		fetch('/users').then(res => res.json).then(users => this.setState({ users }));
+    fetch('/users').then(res => res.json).then(users =>
+    {
+      this.setState({ users });
+      console.info(users);
+    });
 	}
 	
   render() {
@@ -18,8 +22,8 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <p className="App-intro">
-			<span>Users=</span>
-			<span>{this.state.users}</span>
+			    <span>Users=</span>
+			    <span>{this.state.users}</span>
         </p>
       </div>
     );
