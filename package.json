@@ -10,7 +10,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "react-scripts": "^1.1.5"
   },
   "devDependencies": {
     "esm": "^3.0.84"
@@ -19,6 +20,6 @@
     "globals": "yarn global add esm react-scripts",
     "build": "cd client && yarn build && cd ..",
     "start": "node ./client/index.js",
-    "deploy": "yarn start"
+    "deploy": "yarn build && yarn start"
   }
 }
