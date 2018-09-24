@@ -1,8 +1,9 @@
 import React from 'react';
+import { withEverything } from '../../utilities';
 
 const defaultState = { message: "We didn't receive article text from the server yet." };
 
-export default class Article extends React.Component
+class Article extends React.Component
 {
     state = defaultState;
 
@@ -27,6 +28,7 @@ export default class Article extends React.Component
 
     render()
     {
+        console.info(this.props);
         return (
             <div>
                 <h2>Article {this.props.match.params.id}:</h2>
@@ -35,3 +37,5 @@ export default class Article extends React.Component
             );
     }
 }
+
+export default withEverything(Article, '/api/article/:id');
