@@ -21,8 +21,8 @@
   "scripts": {
     "build": "cd client && yarn build && cd ..",
     "heroku-postbuild": "yarn build",
-    "start": "node -r esm ./client/index.js",
+    "start": "node -r esm ./index.js",
     "deploy": "yarn start",    
-    "dev": "concurrently \"cd client && yarn start\" \"nodemon ./app.js\""
+    "dev": "concurrently \"nodemon -r esm ./index.js\" \"cd client && yarn start\""
   }
 }

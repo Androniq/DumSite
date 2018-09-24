@@ -7,7 +7,7 @@ class App extends Component {
 	
 	async componentDidMount()
 	{
-    var res = await fetch('/users');
+    var res = await fetch('/api/users');
     var json = await res.json();
     this.setState({ users: json.toString() });
     console.info(json);    
