@@ -6,7 +6,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/api/hello', (req, res) =>
 {
-    res.send("Message from the server!");
+    res.send({ message: "Message from the server!" });
 });
 
 app.get('*', (req, res) => {

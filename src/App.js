@@ -3,15 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-	state = { users: "none" };
-	
-	async componentDidMount()
-	{
+	state = { resp: "none" };
+  
+  async click()
+  {
     var res = await fetch('/api/hello');
     var json = await res.json();
-    this.setState({ resp: json.toString() });
+    this.setState({ resp: json.message });
     console.info(json);    
-	}
+  }
 	
   render() {
     return (
@@ -21,7 +21,7 @@ class App extends Component {
           <h1 className="App-title">React-Express for Heroku boilerplate</h1>
         </header>
         <p className="App-intro">
-          <button>Get some data from server</button>
+          <button onClick={this.click.bind(this)}>Get some data from server</button>
 			    <span>Response=</span>
 			    <span>{this.state.resp}</span>
         </p>
