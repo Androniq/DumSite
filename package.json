@@ -5,6 +5,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "esm": "^3.0.84",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
@@ -13,13 +14,10 @@
     "react-dom": "^16.5.2",
     "react-scripts": "^1.1.5"
   },
-  "devDependencies": {
-    "esm": "^3.0.84"
-  },
+  "devDependencies": {},
   "scripts": {
-    "globals": "yarn global add esm react-scripts",
     "build": "cd client && yarn build && cd ..",
-    "start": "node ./client/index.js",
+    "start": "node -r esm ./client/index.js",
     "deploy": "yarn build && yarn start"
   }
 }
