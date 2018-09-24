@@ -4,9 +4,11 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
 
+var counter = 1;
+
 app.get('/api/hello', (req, res) =>
-{
-    res.send({ message: "Message from the server!" });
+{    
+    res.send({ message: `Message #${counter++} from the server!` });
 });
 
 app.get('*', (req, res) => {
