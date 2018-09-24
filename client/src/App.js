@@ -5,13 +5,12 @@ import './App.css';
 class App extends Component {
 	state = { users: "none" };
 	
-	componentDidMount()
+	async componentDidMount()
 	{
-    fetch('/users').then(res => res.json).then(users =>
-    {
-      this.setState({ users });
-      console.info(users);
-    });
+    var res = await fetch('/users');
+    var json = await res.json();
+    this.setState({ users: json.toString() });
+    console.info(json);    
 	}
 	
   render() {
