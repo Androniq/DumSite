@@ -8,9 +8,15 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  },
+  "devDependencies": {
+    "esm": "^3.0.84"
   },
   "scripts": {
-    "start": "yarn global add concurrently && concurrently \"node ./bin/www\" \"cd client && yarn install && yarn start\""
+    "build": "cd client && yarn build && cd ..",
+    "start": "node -r esm ./client/index.js"
   }
 }
