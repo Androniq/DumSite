@@ -11,6 +11,11 @@ app.get('/api/hello', (req, res) =>
     res.send({ message: `Message #${counter++} from the server!` });
 });
 
+app.get('/api/article/:id', (req, res) =>
+{    
+    res.send({ message: `Text of article #${req.params.id}.` });
+});
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build/index.html'));
 });
