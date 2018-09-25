@@ -42,7 +42,6 @@ import getArticles from './serverLogic/getArticles';
 import setArticle from './serverLogic/setArticle';
 import { getBlogByUrl } from './serverLogic/blog';
 import { UserContext } from './UserContext.js';
-import { rethrow } from 'rsvp';
 import { getArgument, getNewArgument } from './serverLogic/getArgument';
 import setArgument from './serverLogic/setArgument';
 import checkArticleUrl from './serverLogic/checkArticleUrl';

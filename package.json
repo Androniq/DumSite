@@ -150,7 +150,7 @@
     "render": "babel-node tools/run render",
     "serve": "babel-node tools/run runServer",
     "start": "babel-node tools/run start",
-    "heroku-postbuild": "yarn run build -- --release",
+    "heroku-postbuild": "yarn run build --release",
     "heroku-deploy": "node build/server.js"
   }
 }
