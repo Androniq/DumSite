@@ -1,25 +1,44 @@
+/**
+ * React Starter Kit (https://www.reactstarterkit.com/)
+ *
+ * Copyright © 2014-present Kriasoft, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
 import React from 'react';
+import PropTypes from 'prop-types';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import s from './Home.css';
 
-export default class Home extends React.Component
-{
-	state = { resp: "none" };
+class Home extends React.Component {
+  static propTypes = {
+    articles: PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        PageTitle: PropTypes.string.isRequired,
+        Url: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+  };
 
-    async click()
-    {
-        var res = await fetch('/api/hello');
-        var json = await res.json();
-        this.setState({ resp: json.message });
-        console.info(json);    
-    }
-
-    render()
-    {
-        return (
-            <p className="App-intro">
-                <button onClick={this.click.bind(this)}>Get some data from server</button>
-                <span>Response=</span>
-                <span>{this.state.resp}</span>
-            </p>
-            );
+  render() {
+    return (
+      <div className={s.root}>
+        <div className={s.container}>
+          {this.props.articles.map(item => (
+            <article key={item._id} className={s.newsItem}>
+              <h3 className={s.newsTitle}>
+                <a href={`/article/${item.Url}`}>{item.PageTitle}</a>
+              </h3>
+              <div />
+            </article>
+          ))}
+        </div>
+      </div>
+    );
   }
 }
+
+export default withStyles(s)(Home);
