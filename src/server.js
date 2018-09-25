@@ -85,8 +85,8 @@ app.use(passport.session());
 
 var MongoDBStore = require('connect-mongodb-session')(session);
 var store = new MongoDBStore({
-  uri: 'mongodb://localhost:27017',
-  databaseName: 'DumGrammarSite',
+  uri: process.env.MONGODB_URI,
+  databaseName: process.env.MONGODB_DBNAME,
   collection: 'Sessions'
 }, function(error)
 {
