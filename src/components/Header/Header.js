@@ -1,16 +1,18 @@
 import React from 'react';
 import logo from '../../logo.svg';
 import { Link } from 'react-router-dom';
+import s from './Header.css';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-export default class Header extends React.Component
+class Header extends React.Component
 {
     render()
     {
         return (
-            <header className="App-header">
+            <header className={s.AppHeader}>
                 <img src={logo} className="App-logo" alt="logo" />
-                <h1 className="App-title">React-Express for Heroku boilerplate</h1>
-                <div className="App-navpanel">
+                <h1 className={s.AppTitle}>React-Express for Heroku boilerplate</h1>
+                <div className={s.AppNavpanel}>
                     <Link className='App-link' to='/'>Home</Link>
                     <Link className='App-link' to='/about'>About</Link>
                     <Link className='App-link' to='/article/1'>Article 1</Link>
@@ -19,5 +21,7 @@ export default class Header extends React.Component
                 </div>
             </header>
             );
-  }
+    }
 }
+
+export default withStyles(s)(Header);

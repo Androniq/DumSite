@@ -7,6 +7,16 @@ import { BrowserRouter } from 'react-router-dom';
 
 require('@babel/polyfill');
 
+var app = (
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+);
 
-ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
+var isInitialRender = false;
+
+var renderMethod = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
+
+renderMethod(app, document.getElementById('root'));
+
 registerServiceWorker();

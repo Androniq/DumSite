@@ -10,8 +10,15 @@ const fs = require("fs");
 
 export default (req, res, next) =>
 {
+    const css = new Set();
     const context = 
     {
+        insertCss: (...styles) => {
+            console.info(styles);
+            styles.forEach(style =>
+            {
+                //css.add(style._getCss());
+            });},
         path: req.path,
         query: req.query
     }
@@ -27,8 +34,14 @@ export default (req, res, next) =>
             return res.status(404).end();
         }
 
+        const app = (
+            <StaticRouter context={context}>
+                <App context={context} />
+            </StaticRouter>
+        );
+
         // render the app as a string
-        const html = ReactDOMServer.renderToString(<StaticRouter context={context}><App /></StaticRouter>);
+        const html = ReactDOMServer.renderToString(app);
 
         // inject the rendered app into our html and send it
         return res.send(

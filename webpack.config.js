@@ -13,11 +13,22 @@ module.exports =
     {
         rules:
         [
-            { test: /\.css$/, use: 'css-loader' },
+            { test: /\.css$/, use:
+                [
+                    'isomorphic-style-loader',
+                    'style-loader',
+                    'css-loader'
+                    /*
+                    {
+                      loader: 'css-loader',
+                      options: { importLoaders: 1 }
+                    }*/
+                ]
+            },
             { test: /\.svg$/, loader: 'svg-inline-loader' },
             {
                 test: /\.m?js$/,
-                exclude: /(node_modules)/,
+                exclude: /node_modules/,
                 use:
                 [
                     {
