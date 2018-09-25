@@ -41,8 +41,6 @@ import getArticleInfo from './serverLogic/getArticleInfo';
 import getArticles from './serverLogic/getArticles';
 import setArticle from './serverLogic/setArticle';
 import { getBlogByUrl } from './serverLogic/blog';
-import { GOOGLE_CLIENT_SECRET, FACEBOOK_APP_SECRET } from '../secret.js';
-import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from '../ids.js';
 import { UserContext } from './UserContext.js';
 import { rethrow } from 'rsvp';
 import { getArgument, getNewArgument } from './serverLogic/getArgument';
@@ -172,8 +170,8 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 passport.use(
   new GoogleStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: 'http://mydomain.example.com:3000/login/google/callback',
       passReqToCallback: false,
     },
@@ -223,8 +221,8 @@ app.get(
 passport.use(
   new FacebookStrategy(
     {
-      clientID: FACEBOOK_APP_ID,
-      clientSecret: FACEBOOK_APP_SECRET,
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: 'http://mydomain.example.com:3000/auth/facebook/callback',
       passReqToCallback: false
     },
