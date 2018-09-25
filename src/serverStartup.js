@@ -40,8 +40,13 @@ async function getCollection(db, name) {
   return r;
 }
 
-async function getDbCollections() {
-  require('dotenv').config();
+async function getDbCollections()
+{
+  console.info("NODE_ENV=" + process.env.NODE_ENV);
+  if (process.env.NODE_ENV !== 'production')
+  {
+    require('dotenv').config();
+  }
   // Connection url
   const url = process.env.MONGODB_URI;
   // Database Name
