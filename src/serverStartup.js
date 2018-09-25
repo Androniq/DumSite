@@ -43,9 +43,9 @@ async function getCollection(db, name) {
 async function getDbCollections() {
   require('dotenv').config();
   // Connection url
-  const url = 'mongodb://localhost:27017';
+  const url = process.env.MONGODB_URI;
   // Database Name
-  const dbName = 'DumGrammarSite';
+  const dbName = process.env.MONGODB_DBNAME;
 
   mongoAsync.client = mongoClient;
 
