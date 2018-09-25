@@ -17,7 +17,7 @@ export default (req, res, next) =>
     }
 
     // point to the html file created by CRA's build tool
-    const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
+    const filePath = path.resolve(__dirname, '..', 'dist', 'index.html');
 
     fs.readFile(filePath, 'utf8', (err, htmlData) =>
     {
@@ -33,7 +33,7 @@ export default (req, res, next) =>
         // inject the rendered app into our html and send it
         return res.send(
             htmlData.replace(
-                '<div id="root"></div>',
+                '<div id="root1"></div>',
                 `<div id="root">${html}</div>`
             )
         );
